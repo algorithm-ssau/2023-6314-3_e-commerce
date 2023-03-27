@@ -1,0 +1,23 @@
+:root {
+    --ff-primary: 'Philosopher';
+    --ff-secondary: 'Montserrat';
+
+    --fs-body: 1.5rem;
+    --fs-sec-body: 1.25rem;
+}
+
+/* main font for headers */
+@font-face {
+    font-family: Philosopher;
+    src: url(./../fonts/Philosopher-Regular.ttf);
+    font-style: normal;
+    font-weight: normal;
+}
+
+/* font for body */
+@font-face {
+    font-family: Montserrat;
+    src: url(./../fonts/Montserrat-Regular.ttf);
+    font-style: normal;
+    font-weight: normal;
+}

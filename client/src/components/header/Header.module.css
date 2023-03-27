@@ -1,0 +1,22 @@
+@import './../../styles/variables.css';
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: var(--fs-body);
+    font-family: var(--ff-primary);
+}
+
+.headerSection {
+    display: flex;
+    align-items: center;
+}
+
+.headerItem {
+    padding: 0px 0px 0px 30px;
+}
+
+.headerButton {
+    cursor: pointer
+}

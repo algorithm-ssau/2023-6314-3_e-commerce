@@ -1,0 +1,75 @@
+@import './../../styles/variables.css';
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(6, 100px) ;
+    position: relative;
+    margin: 1em auto;
+    width: 100%;
+    max-width: 1600px;
+    /* background-color: lightblue; */
+}
+
+.gridBottomPicture {
+    grid-column: 1 / span 5;
+    grid-row: 1 / 7;
+}
+
+.gridBottomPicture img {
+    width: 100%;
+}
+
+.gridTopPicture {
+    grid-column: 5 / span 2;
+    grid-row: 4; 
+    z-index: 1; 
+}
+
+.mainHeader {
+    font-family: var(--ff-primary);
+    font-size: 3.5rem;
+    letter-spacing: 0.2rem;
+    grid-column: 7 / 12;
+    grid-row: 2;
+    margin: 0px;
+}
+
+.mainHeader .mainP1 {
+    padding: 0;
+    margin: 0;
+    transform: translate(-3rem, 3rem);    
+}
+
+.mainHeader .mainP2 {
+    transform: translate(14rem);
+}
+
+.mainP {
+    font-family: var(--ff-secondary);
+    font-size: var(--fs-body);
+    grid-column: 8 / 13;
+    grid-row: 4;
+    transform: translate(0, 3rem);
+}
+
+.btnCatalog {
+    font-family: var(--ff-secondary);
+    font-size: var(--fs-sec-body);
+    background-color: #fff;
+    grid-column: 8 / 10;
+    grid-row: 6;
+    padding: 0px 0px;
+    height: 50%;
+    transform: translate(0, 4.6rem);
+    transition-duration: 0.4s;
+}
+
+.btnCatalog .btnArrow {
+    padding: 0px 0px 0px 20px;
+}
+
+.btnCatalog:hover {
+    background-color: #fcf3f3;
+}
+
