@@ -1,7 +1,4 @@
 import styles from "./Header.module.css"
-import icon_bag from "./icons/images/icon_bag.svg"
-import icon_favorite from "./icons/images/icon_favorite.svg"
-import icon_account from "./icons/images/icon_account.svg"
 import { IconAccount } from "./icons/IconAccount"
 import { IconBag } from "./icons/IconBag"
 import { IconFavorite } from "./icons/IconFavorite"

@@ -13,7 +13,7 @@ a {
 
 * {
   box-sizing: border-box;
-  outline: 1px solid magenta;
+  /* outline: 1px solid magenta; */
 }
 
 ul {
@@ -31,6 +31,4 @@ li {
   margin: 1em auto;
   max-width: 1400px;
   width: 80%;
-  display: flex;
-  flex-direction: column;
 }
