@@ -15,8 +15,5 @@
 
 .headerItem {
     padding: 0 0 0 1.25em;
-}
-
-.headerButton {
-    cursor: pointer
+    cursor: pointer;
 }

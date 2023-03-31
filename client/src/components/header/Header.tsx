@@ -12,13 +12,13 @@ export const Header = () => {
           <a className={styles.headerButton} href="#">EXQUISITE</a>
         </div>
         <div className={styles.headerSection} id="icons">
-          <a className={styles.headerItem + ' ' + styles.headerButton} id="favorite" href="#" >
+          <a className={styles.headerItem} id="favorite" href="#" >
               <IconFavorite/>
           </a>
-          <a className={styles.headerItem + ' ' + styles.headerButton} id="bag" href="#">
+          <a className={styles.headerItem} id="bag" href="#">
               <IconBag/>
           </a>
-          <a className={styles.headerItem + ' ' + styles.headerButton} id="account" href="#">
+          <a className={styles.headerItem} id="account" href="#">
               <IconAccount/>
           </a> 
         </div>

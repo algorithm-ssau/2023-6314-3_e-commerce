@@ -12,7 +12,6 @@
     margin: 1em auto;
     width: 100%;
     max-width: 1600px;
-    /* background-color: lightblue; */
 }
 
 .gridHeroBottomPicture {
@@ -37,7 +36,7 @@
 
 .mainHeader {
     font-family: var(--ff-primary);
-    font-size: var(--ff-h1);
+    font-size: var(--fs-h1);
     letter-spacing: 0.2rem;
     grid-column: 7 / 12;
     grid-row: 2;
@@ -51,7 +50,7 @@
 }
 
 .mainHeader .mainP2 {
-    transform: translate(20rem);
+    transform: translate(15rem);
 }
 
 .mainP {
@@ -73,7 +72,7 @@
     transform: translate(0rem, 5.7rem);
     transition-duration: 0.4s;
     border: 2px solid #3B2D2D;
- 
+    cursor: pointer;
 }
 
 .btnCatalog .btnArrow {
@@ -94,22 +93,17 @@
 
 .mainP3 {
     font-family: var(--ff-primary);
-    font-size: var(--ff-h2);
+    font-size: var(--fs-h2);
     letter-spacing: 0.1rem;
 }
 
 .gridTilesContainer {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(7, 100px);
+    grid-template-rows: repeat(7, 80px);
     grid-gap: 1em;
 }
 
-.gridTilesContainer img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 
 .gridTilesItem1 {
     position: relative;
@@ -166,7 +160,7 @@
 
 .btnText {
     position: absolute;
-    bottom: 1em;
+    bottom: 5%;
     left: 1em;
     background-color: #fff;
     color: black;
@@ -208,21 +202,59 @@
     transition: all 0.4s ease;
 }
 
-
-/* .btnTile {
-    position: absolute;
-    bottom: 1.5em;
-    left: 1.5em;
-    background-color: #fff;
-    color: black;
-    font-family: var(--ff-secondary);
-    font-size: var(--fs-body);
-    padding: 0.5em 1em;
-    border: none;
-    transition-duration: 0.4s;
+.viewAllBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 2em auto;
 }
 
-.btnTile:hover {
-    color: #fff;
+.viewAllBtn .btn {
+    font-family: var(--ff-secondary);
+    font-size: var(--fs-sec-body);
+    background-color: #fff;
+    padding: 1em;
+    transition-duration: 0.4s;
+    border: 2px solid #3B2D2D;
+    cursor: pointer;
+}
+
+.viewAllBtn .btn:hover {
     background-color: #3B2D2D;
+    color: #fff;
+}
+
+/* 
+    About us
+*/
+
+.flexAbout {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 5rem 0;
+}
+
+/* .flexAbout .flexPic {
+    margin: 0 1rem 0 0;
 } */
+
+.flexAbout .flexPic img {
+    width: 100%;
+}
+
+.flexAbout .flexText .mainP4 {
+    font-family: var(--ff-primary);
+    font-size: var(--fs-h2);
+    letter-spacing: 0.1rem;
+}
+
+.flexAbout .flexText .text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    font-family: var(--ff-secondary);
+    font-size: var(--fs-body);
+    max-width: 650px;
+}
+

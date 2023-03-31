@@ -1,5 +1,12 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 html,
 body {
+  height: 100%;
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -29,6 +36,27 @@ li {
 
 .container {
   margin: 1em auto;
+  width: 70%;
+  /* min-height: 100%; */
   max-width: 1400px;
-  width: 80%;
+  /* display: flex;
+  flex-direction: column; */
+} 
+
+.container.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-sec-body);
+  margin-top: 3em;
+  margin-bottom: 0;
+}
+
+footer {
+  margin-top: auto;
+}
+
+.main {
+  flex: 1 1 auto;
 }
