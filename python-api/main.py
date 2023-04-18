@@ -4,13 +4,17 @@ import pymysql
 
 dotenv.load_dotenv('config.env')
 
-# Инициализация переменных
+#region Инициализация переменных
     # Лист со всеми id из matrPaW
 listIdFromMatrPaW = []
     # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
 listFavoriteCategories = []
     # Лист id товаров в прошлых покупках, корзине, избранном
 listofIdForAVGPrice = []
+     # Матрица id рекомендованных товаров с их свойствами из БД
+matrRecProducts = []
+    # Лист id рекомендованных товаров
+listRecProducts = []
     # Средня цена товаров в прошлых покупках, корзине, избранном
 averagePrice = 0
 
@@ -21,6 +25,7 @@ listRecent = [4,8090,2,67,5,666]
 listPurchased = [45,777,666]
 # matrix of ProductId and Weights - матрица id продуктов и весов
 matrPaW = []
+#endregion
 
 # Подключение к БД
 try:
@@ -38,27 +43,34 @@ except:
 
 # Предполагаем, что fetchall & fetchone при запросе единственного значения возвращает строку, а при запросе одинаковых значений
 # например только id - возвращает массив  
-''' with connection.cursor() as cursor: 
-    # SQLзапросы 
+#region SQLзапросы 
+with connection.cursor() as cursor: 
     idFromCart = "SELECT productid FROM AddedToCartProduct" 
     idFromFavorite = "SELECT productid FROM FavoriteProduct"
     idFromRecent = "SELECT productid FROM RecentProduct"
     idFromPurchased = "SELECT productid FROM PurchasedProduct"
-    
+    idFromProduct = "SELECT id,price,discount,productCategoryId FROM Product WHERE ("
+    for category in listFavoriteCategories:
+        idFromProduct += "productCategoryId=" + category + " OR "
+    idFromProduct = idFromProduct[:(len(idFromProduct)-4)] + ")"
+
     # Выполнение запроса и присвоение результа спискам.
     cursor.execute(idFromCart) 
     listCart = cursor.fetchall() ########## Может не работать
 
     cursor.execute(idFromFavorite)
     listFavorite = cursor.fetchall() ########## Может не работать
-    
+
     cursor.execute(idFromRecent)
     listRecent = cursor.fetchall() ########## Может не работать
-    
+
     cursor.execute(idFromPurchased)
     listPurchased = cursor.fetchall() ########## Может не работать
 
-    cursor.close() '''
+    cursor.execute(idFromProduct)
+    listAllProducts = cursor.fetchall() ########## Может не работать
+cursor.close()
+#endregion
 
 # Метод проверки вхождения id в matr
 def checkInMatr(matr, id):
@@ -93,11 +105,15 @@ def insertIntoMatr(matr, list, weight):
 
 # Получение списка id из матрицы
 def getIdFromMatr(matr):
+    newList = []
     for i in matr:
-        listIdFromMatrPaW.append(i[0])
+        newList.append(i[0])
+    return newList
 
 # Получение наиболее часто встречаемых категорий
 def getFavoriteCategories():
+    # Получили список всех id из MatrPaW
+    listIdFromMatrPaW = getIdFromMatr(matrPaW)
     # Получаем категорию каждого id, встречающиеся в MatrPaW, формируем из них список всех категорий
     catInMatrPaW = []
     with connection.cursor() as cursor: 
@@ -128,8 +144,31 @@ def getAveragePrice():
     cursor.close() 
     averagePrice += sum(priceInListofIdForAVGPrice)/len(priceInListofIdForAVGPrice)
 
+# Формирование matrRecProducts
+def getMatrRecProducts():
+    for product in listAllProducts:
+        if product[0] in (listCart or listPurchased):
+            listAllProducts.remove(product)
+        else:
+            product.append(0)
 
-#region Формируем matr
+# Оценка товаров по категории
+def analysisByCategories(matr):
+    for product in matr:
+        i = 0
+        while listFavoriteCategories[i] != product[3]:
+            i += 1
+        product[len(product)-1] += len(listFavoriteCategories) - i
+
+# ДРУГИЕ МЕТОДЫ ОЦЕНКИ
+
+# Формирование итогового листа рекомендованных товаров из матрицы 
+def getListRecProducts(matr):
+    matr.sort(key=lambda x: x[len(x)-1], reverse=True)
+    listRecProducts = getIdFromMatr(matr)
+
+#region MAIN
+#Формируем MatrPaW
 if len(listCart) != 0:
     insertIntoMatr(matrPaW,listCart, 1)
 if len(listFavorite) != 0:
@@ -138,15 +177,18 @@ if len(listRecent) != 0:
     insertIntoMatr(matrPaW,listRecent, 1)
 if len(listPurchased) != 0:
     insertIntoMatr(matrPaW,listPurchased, 1)
+
+getFavoriteCategories() # Получаем любимые категории пользователчя
+getAveragePrice() # Получаем средний ценник пользователя
+getMatrRecProducts() # Формируем матрицу всех товаров
+analysisByCategories(matrRecProducts) # Оценили категории
+# ЗДЕСЬ пишем методы оценки
+getListRecProducts(matrRecProducts) # Формируем итоговый список
 #endregion
 
-# Вывод полученой матрицы
+# Выводы
 print(matrPaW)
-
-getIdFromMatr(matrPaW)
-
 print(listIdFromMatrPaW)
-
 print(averagePrice)
 
 # Закрываем соединение с БД
