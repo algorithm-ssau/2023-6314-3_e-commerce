@@ -18,11 +18,33 @@ try:
 except:
     print("Сonnection is not established")
 
+with connection.cursor() as cursor: 
+    # SQLзапросы 
+    idFromCart = "SELECT productid FROM AddedToCartProduct" 
+    idFromFavorite = "SELECT productid FROM FavoriteProduct"
+    idFromRecent = "SELECT productid FROM RecentProduct"
+    idFromPurchased = "SELECT productid FROM PurchasedProduct"
+    
+    # Выполнение запроса и присвоение результа спискам.
+    cursor.execute(idFromCart) 
+    list_cart = cursor.fetchall()
+
+    cursor.execute(idFromFavorite)
+    list_favorite = cursor.fetchall()
+    
+    cursor.execute(idFromRecent)
+    list_recent = cursor.fetchall()
+    
+    cursor.execute(idFromPurchased)
+    list_purchased = cursor.fetchall()
+
+    cursor.close()
+
 # Тестовые списки для создания матрицы алгоритма подбора рекомендаций
 list_cart = [1,3,4,8090,45]
-list_favorites = [3,6,8090,2,6,56,222]
-list_recently = [4,8090,2,67,5,666]
-list_bought = [45,777,666]
+list_favorite = [3,6,8090,2,6,56,222]
+list_recent = [4,8090,2,67,5,666]
+list_purchased = [45,777,666]
 matr = []
 
 # Метод проверки вхождения id в matr
@@ -59,12 +81,12 @@ def insertIntoMatr(list, weight):
 # Формируем matr
 if len(list_cart) != 0:
     insertIntoMatr(list_cart, 1)
-if len(list_favorites) != 0:
-    insertIntoMatr(list_favorites, 1)
-if len(list_recently) != 0:
-    insertIntoMatr(list_recently, 1)
-if len(list_bought) != 0:
-    insertIntoMatr(list_bought, 1)
+if len(list_favorite) != 0:
+    insertIntoMatr(list_favorite, 1)
+if len(list_recent) != 0:
+    insertIntoMatr(list_recent, 1)
+if len(list_purchased) != 0:
+    insertIntoMatr(list_purchased, 1)
 
 # Вывод полученой матрицы
 print(matr)
