@@ -5,10 +5,14 @@ import pymysql
 dotenv.load_dotenv('config.env')
 
 # Инициализация переменных
-    #лист со всеми id из matrPaW
+    # Лист со всеми id из matrPaW
 listIdFromMatrPaW = []
-    # лист категорий, расположенных в порядке уменьшения популярности у пользователя
+    # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
 listFavoriteCategories = []
+    # Лист id товаров в прошлых покупках, корзине, избранном
+listofIdForAVGPrice = []
+    # Средня цена товаров в прошлых покупках, корзине, избранном
+averagePrice = 0
 
 # Тестовые списки для создания матрицы алгоритма подбора рекомендаций
 listCart = [1,3,4,8090,45]
@@ -93,7 +97,7 @@ def getIdFromMatr(matr):
         listIdFromMatrPaW.append(i[0])
 
 # Получение наиболее часто встречаемых категорий
-def GetFavoriteCategories():
+def getFavoriteCategories():
     # Получаем категорию каждого id, встречающиеся в MatrPaW, формируем из них список всех категорий
     catInMatrPaW = []
     with connection.cursor() as cursor: 
@@ -102,6 +106,7 @@ def GetFavoriteCategories():
             cursor.execute(sqlProductCatId) 
             productCatId = cursor.fetchone() ########## Может не работать
             catInMatrPaW.append(productCatId)
+    cursor.close()
     # Составляем матрицу весов каждой категории
         # matrix of Categories and Weights - матрица категорий и весов
     matrCaW = []
@@ -111,7 +116,18 @@ def GetFavoriteCategories():
     # Записываем отсортированные категории в список избранных в порядке уменьшения популярности
     for category in matrCaW:
         listFavoriteCategories.append(category[0])
-    cursor.close()
+
+# Получение средней цены товара, на основе прошлых покупок, корзины и избранного.
+def getAveragePrice():
+    listofIdForAVGPrice = listCart + listFavorite + listPurchased
+    with connection.cursor() as cursor: 
+        for id in listofIdForAVGPrice:
+            sqlPrice = "SELECT price FROM Product WHERE id=" + str(id)
+            cursor.execute(sqlPrice) 
+            priceInListofIdForAVGPrice += cursor.fetchone()
+    cursor.close() 
+    averagePrice += sum(priceInListofIdForAVGPrice)/len(priceInListofIdForAVGPrice)
+
 
 #region Формируем matr
 if len(listCart) != 0:
@@ -130,6 +146,8 @@ print(matrPaW)
 getIdFromMatr(matrPaW)
 
 print(listIdFromMatrPaW)
+
+print(averagePrice)
 
 # Закрываем соединение с БД
 connection.close()
