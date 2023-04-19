@@ -30,11 +30,11 @@ matrPaW = []
 # Подключение к БД
 try:
     connection = pymysql.connect(
-        host = os.environ['host'],
-        user = os.environ['user'],
-        password = os.environ['password'],
-        db = os.environ['db'],
-        port = int(os.environ['port']), 
+        host = os.environ['HOST'],
+        port = int(os.environ['DATABASE_PORT']), 
+        user = os.environ['DATABASE_USERNAME'],
+        password = os.environ['DATABASE_PASSWORD'],
+        db = os.environ['DATABASE_NAME'],
         cursorclass = pymysql.cursors.DictCursor
     )
     print("Succesfull")
