@@ -144,6 +144,26 @@ def getAveragePrice():
     cursor.close() 
     averagePrice += sum(priceInListofIdForAVGPrice)/len(priceInListofIdForAVGPrice)
 
+# Оценка товара по стоимости
+def analysisByPrice(matr):
+    for product in matr:
+
+        if  (product[1] >= averagePrice*1.5) or (product[1] <= averagePrice*0.5):
+            product[len(product)-1] += 0
+
+        elif (product[1] >= averagePrice*1.25) or (product[1] <= averagePrice*0.9):
+            product[len(product)-1] += 1
+        
+        elif  product[1] >= averagePrice*1.1:
+            product[len(product)-1] += 3 
+
+        elif  (product[1] >= averagePrice) or (product[1] < averagePrice):
+            product[len(product)-1] += 2
+        
+        else:
+            product[len(product)-1] += 0 
+
+
 # Формирование matrRecProducts
 def getMatrRecProducts():
     for product in listAllProducts:
@@ -169,20 +189,21 @@ def getListRecProducts(matr):
 
 #region MAIN
 #Формируем MatrPaW
+if len(listPurchased) != 0:
+    insertIntoMatr(matrPaW,listPurchased, 4)
 if len(listCart) != 0:
-    insertIntoMatr(matrPaW,listCart, 1)
+    insertIntoMatr(matrPaW,listCart, 3)
 if len(listFavorite) != 0:
-    insertIntoMatr(matrPaW,listFavorite, 1)
+    insertIntoMatr(matrPaW,listFavorite, 2)
 if len(listRecent) != 0:
     insertIntoMatr(matrPaW,listRecent, 1)
-if len(listPurchased) != 0:
-    insertIntoMatr(matrPaW,listPurchased, 1)
 
-getFavoriteCategories() # Получаем любимые категории пользователчя
+getFavoriteCategories() # Получаем любимые категории пользователя
 getAveragePrice() # Получаем средний ценник пользователя
 getMatrRecProducts() # Формируем матрицу всех товаров
 analysisByCategories(matrRecProducts) # Оценили категории
-# ЗДЕСЬ пишем методы оценки
+analysisByPrice(matrRecProducts) #Оценка стоимости товара
+# ЗДЕСЬ пишем методы оценки (цену и скидку)
 getListRecProducts(matrRecProducts) # Формируем итоговый список
 #endregion
 
