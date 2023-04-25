@@ -126,7 +126,7 @@ def getFavoriteCategories():
     # Составляем матрицу весов каждой категории
         # matrix of Categories and Weights - матрица категорий и весов
     matrCaW = []
-    insertIntoMatr(matrCaW, catInMatrPaW,1)
+    insertIntoMatr(matrCaW,catInMatrPaW,1)
     # Сортируем матрицу весов категорий
     matrCaW.sort(key=lambda x: x[1], reverse=True)  # Возможно (sorted(matrCaW, key=lambda x:x[1]), reverse=True)          
     # Записываем отсортированные категории в список избранных в порядке уменьшения популярности
@@ -159,10 +159,25 @@ def analysisByPrice(matr):
 
         elif  (product[1] >= averagePrice) or (product[1] < averagePrice):
             product[len(product)-1] += 2
-        
-        else:
-            product[len(product)-1] += 0 
 
+# Оценка товара по скидке
+def analysisByDiscount(matr):
+    for product in matr:
+
+        if  0 < product[2] <= 5:
+            product[len(product)-1] += 1
+
+        elif 5 < product[2] <= 10:
+            product[len(product)-1] += 2
+        
+        elif 10 < product[2] <= 20:
+            product[len(product)-1] += 4
+        
+        elif 20 < product[2] <= 35:
+            product[len(product)-1] += 3 
+
+        elif 35 < product[2] <= 50:
+            product[len(product)-1] += 1
 
 # Формирование matrRecProducts
 def getMatrRecProducts():
@@ -202,8 +217,8 @@ getFavoriteCategories() # Получаем любимые категории п�
 getAveragePrice() # Получаем средний ценник пользователя
 getMatrRecProducts() # Формируем матрицу всех товаров
 analysisByCategories(matrRecProducts) # Оценили категории
-analysisByPrice(matrRecProducts) #Оценка стоимости товара
-# ЗДЕСЬ пишем методы оценки (цену и скидку)
+analysisByPrice(matrRecProducts) # Оценка стоимости товара
+analysisByDiscount(matrRecProducts) # Оценка скидки товара
 getListRecProducts(matrRecProducts) # Формируем итоговый список
 #endregion
 
