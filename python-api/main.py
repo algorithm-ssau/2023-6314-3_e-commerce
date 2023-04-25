@@ -5,26 +5,23 @@ import pymysql
 dotenv.load_dotenv('config.env')
 
 #region Инициализация переменных
+    #id пользователя
+user_id = int(0)
     # Лист со всеми id из matrPaW
-listIdFromMatrPaW = []
+list_id_from_matr_PaW = []
     # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
-listFavoriteCategories = []
+list_favorite_categories = []
     # Лист id товаров в прошлых покупках, корзине, избранном
-listofIdForAVGPrice = []
+list_of_id_for_AVG_price = []
      # Матрица id рекомендованных товаров с их свойствами из БД
-matrRecProducts = []
+matr_rec_products = []
     # Лист id рекомендованных товаров
-listRecProducts = []
+list_rec_products = []
     # Средня цена товаров в прошлых покупках, корзине, избранном
-averagePrice = 0
+average_price = int(0)
+    # matrix of ProductId and Weights - матрица id продуктов и весов
+matr_PaW = []
 
-# Тестовые списки для создания матрицы алгоритма подбора рекомендаций
-listCart = [1,3,4,8090,45]
-listFavorite = [3,6,8090,2,6,56,222]
-listRecent = [4,8090,2,67,5,666]
-listPurchased = [45,777,666]
-# matrix of ProductId and Weights - матрица id продуктов и весов
-matrPaW = []
 #endregion
 
 # Подключение к БД
@@ -45,35 +42,35 @@ except:
 # например только id - возвращает массив  
 #region SQLзапросы 
 with connection.cursor() as cursor: 
-    idFromCart = "SELECT productid FROM AddedToCartProduct" 
-    idFromFavorite = "SELECT productid FROM FavoriteProduct"
-    idFromRecent = "SELECT productid FROM RecentProduct"
-    idFromPurchased = "SELECT productid FROM PurchasedProduct"
-    idFromProduct = "SELECT id,price,discount,productCategoryId FROM Product WHERE ("
-    for category in listFavoriteCategories:
-        idFromProduct += "productCategoryId=" + category + " OR "
-    idFromProduct = idFromProduct[:(len(idFromProduct)-4)] + ")"
+    id_from_cart = "SELECT productId FROM added_to_cart_product WHERE userId=" + user_id 
+    id_from_favorite = "SELECT productId FROM favorite_product WHERE userId=" + user_id 
+    id_from_recent = "SELECT productId FROM recent_product WHERE userId=" + user_id 
+    id_from_purchased = "SELECT productId FROM purchased_product WHERE userId=" + user_id 
+    id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE ("
+    for category in list_favorite_categories:
+        id_from_product += "categoryId=" + category + " OR "
+    id_from_product = id_from_product[:(len(id_from_product)-4)] + ") AND userId=" + user_id 
 
     # Выполнение запроса и присвоение результа спискам.
-    cursor.execute(idFromCart) 
-    listCart = cursor.fetchall() ########## Может не работать
+    cursor.execute(id_from_cart) 
+    list_cart = cursor.fetchall() ########## Может не работать
 
-    cursor.execute(idFromFavorite)
-    listFavorite = cursor.fetchall() ########## Может не работать
+    cursor.execute(id_from_favorite)
+    list_favorite = cursor.fetchall() ########## Может не работать
 
-    cursor.execute(idFromRecent)
-    listRecent = cursor.fetchall() ########## Может не работать
+    cursor.execute(id_from_recent)
+    list_recent = cursor.fetchall() ########## Может не работать
 
-    cursor.execute(idFromPurchased)
-    listPurchased = cursor.fetchall() ########## Может не работать
+    cursor.execute(id_from_purchased)
+    list_purchased = cursor.fetchall() ########## Может не работать
 
-    cursor.execute(idFromProduct)
-    listAllProducts = cursor.fetchall() ########## Может не работать
+    cursor.execute(id_from_product)
+    list_all_products = cursor.fetchall() ########## Может не работать
 cursor.close()
 #endregion
 
 # Метод проверки вхождения id в matr
-def checkInMatr(matr, id):
+def check_in_matr(matr, id):
     check = False
     for i in matr:
         if i[0] == id:
@@ -81,7 +78,7 @@ def checkInMatr(matr, id):
     return check
 
 # Метод получения индекса id в matr
-def getIndexInMatr(matr, id):
+def get_index_in_matr(matr, id):
     index = -1
     j = 0
     while index == -1:
@@ -91,77 +88,82 @@ def getIndexInMatr(matr, id):
     return index
 
 # Метод для обработки входящих списков
-def insertIntoMatr(matr, list, weight):
+def insert_into_matr(matr, list, weight):
     # Идём по списку
     for i in list:
         # Если товар с текущим id уже есть в matr,
         # находим индекс id в matr, добавляем id необходимый вес
-        if checkInMatr(matr,i) == True:
-            index = getIndexInMatr(matr,i)
+        if check_in_matr(matr,i) == True:
+            index = get_index_in_matr(matr,i)
             matr[index][1] += weight
         # иначе добавляем элемент в matr, устанавливаем вес
         else:
             matr.append([i,weight])
 
 # Получение списка id из матрицы
-def getIdFromMatr(matr):
-    newList = []
+def get_id_from_matr(matr):
+    new_list = []
     for i in matr:
-        newList.append(i[0])
-    return newList
+        new_list.append(i[0])
+    return new_list
 
 # Получение наиболее часто встречаемых категорий
-def getFavoriteCategories():
+def get_favorite_categories():
     # Получили список всех id из MatrPaW
-    listIdFromMatrPaW = getIdFromMatr(matrPaW)
+    list_id_from_matr_PaW = get_id_from_matr(matr_PaW)
     # Получаем категорию каждого id, встречающиеся в MatrPaW, формируем из них список всех категорий
-    catInMatrPaW = []
+    category_in_matr_PaW = []
     with connection.cursor() as cursor: 
-        for id in listIdFromMatrPaW:
-            sqlProductCatId = "SELECT productCategoryId FROM Product WHERE id=" + str(id)
-            cursor.execute(sqlProductCatId) 
-            productCatId = cursor.fetchone() ########## Может не работать
-            catInMatrPaW.append(productCatId)
+        for id in list_id_from_matr_PaW:
+            sql_product_categoryid = "SELECT categoryId FROM product WHERE id=" + str(id)
+            cursor.execute(sql_product_categoryid) 
+            product_categoryid = cursor.fetchone() ########## Может не работать
+            category_in_matr_PaW.append(product_categoryid)
     cursor.close()
     # Составляем матрицу весов каждой категории
         # matrix of Categories and Weights - матрица категорий и весов
-    matrCaW = []
-    insertIntoMatr(matrCaW,catInMatrPaW,1)
+    matr_CaW = []
+    insert_into_matr(matr_CaW,category_in_matr_PaW,1)
     # Сортируем матрицу весов категорий
-    matrCaW.sort(key=lambda x: x[1], reverse=True)  # Возможно (sorted(matrCaW, key=lambda x:x[1]), reverse=True)          
+    matr_CaW.sort(key=lambda x: x[1], reverse=True)  # Возможно (sorted(matrCaW, key=lambda x:x[1]), reverse=True)          
     # Записываем отсортированные категории в список избранных в порядке уменьшения популярности
-    for category in matrCaW:
-        listFavoriteCategories.append(category[0])
+    for category in matr_CaW:
+        list_favorite_categories.append(category[0])
 
 # Получение средней цены товара, на основе прошлых покупок, корзины и избранного.
-def getAveragePrice():
-    listofIdForAVGPrice = listCart + listFavorite + listPurchased
+def get_average_price():
+    price_in_list_of_id_for_AVG_price = []
+    temp = list_cart + list_favorite + list_purchased
+    for id in temp:
+        if id not in price_in_list_of_id_for_AVG_price:
+            price_in_list_of_id_for_AVG_price.append(id)
     with connection.cursor() as cursor: 
-        for id in listofIdForAVGPrice:
-            sqlPrice = "SELECT price FROM Product WHERE id=" + str(id)
+        for id in list_of_id_for_AVG_price:
+            sqlPrice = "SELECT price FROM product WHERE id=" + str(id)
             cursor.execute(sqlPrice) 
-            priceInListofIdForAVGPrice += cursor.fetchone()
+            price_in_list_of_id_for_AVG_price += cursor.fetchone()
     cursor.close() 
-    averagePrice += sum(priceInListofIdForAVGPrice)/len(priceInListofIdForAVGPrice)
+    average_price = sum(price_in_list_of_id_for_AVG_price)/len(price_in_list_of_id_for_AVG_price)
+    return average_price
 
 # Оценка товара по стоимости
-def analysisByPrice(matr):
+def analysis_by_price(matr):
     for product in matr:
 
-        if  (product[1] >= averagePrice*1.5) or (product[1] <= averagePrice*0.5):
+        if  (product[1] >= average_price*1.5) or (product[1] <= average_price*0.5):
             product[len(product)-1] += 0
 
-        elif (product[1] >= averagePrice*1.25) or (product[1] <= averagePrice*0.9):
+        elif (product[1] >= average_price*1.25) or (product[1] <= average_price*0.9):
             product[len(product)-1] += 1
         
-        elif  product[1] >= averagePrice*1.1:
+        elif  product[1] >= average_price*1.1:
             product[len(product)-1] += 3 
 
-        elif  (product[1] >= averagePrice) or (product[1] < averagePrice):
+        elif  (product[1] >= average_price) or (product[1] < average_price):
             product[len(product)-1] += 2
 
 # Оценка товара по скидке
-def analysisByDiscount(matr):
+def analysis_by_discount(matr):
     for product in matr:
 
         if  0 < product[2] <= 5:
@@ -180,52 +182,50 @@ def analysisByDiscount(matr):
             product[len(product)-1] += 1
 
 # Формирование matrRecProducts
-def getMatrRecProducts():
-    for product in listAllProducts:
-        if product[0] in (listCart or listPurchased):
-            listAllProducts.remove(product)
+def get_matr_rec_products():
+    for product in list_all_products:
+        if product[0] in (list_cart or list_purchased):
+            list_all_products.remove(product)
         else:
             product.append(0)
 
 # Оценка товаров по категории
-def analysisByCategories(matr):
+def analysis_by_categories(matr):
     for product in matr:
         i = 0
-        while listFavoriteCategories[i] != product[3]:
+        while list_favorite_categories[i] != product[3]:
             i += 1
-        product[len(product)-1] += len(listFavoriteCategories) - i
+        product[len(product)-1] += len(list_favorite_categories) - i
 
 # ДРУГИЕ МЕТОДЫ ОЦЕНКИ
 
 # Формирование итогового листа рекомендованных товаров из матрицы 
-def getListRecProducts(matr):
+def get_list_rec_products(matr):
     matr.sort(key=lambda x: x[len(x)-1], reverse=True)
-    listRecProducts = getIdFromMatr(matr)
+    list_rec_products = get_id_from_matr(matr)
+    return list_rec_products
 
 #region MAIN
+
 #Формируем MatrPaW
-if len(listPurchased) != 0:
-    insertIntoMatr(matrPaW,listPurchased, 4)
-if len(listCart) != 0:
-    insertIntoMatr(matrPaW,listCart, 3)
-if len(listFavorite) != 0:
-    insertIntoMatr(matrPaW,listFavorite, 2)
-if len(listRecent) != 0:
-    insertIntoMatr(matrPaW,listRecent, 1)
+if len(list_purchased) != 0:
+    insert_into_matr(matr_PaW,list_purchased, 4)
+if len(list_cart) != 0:
+    insert_into_matr(matr_PaW,list_cart, 3)
+if len(list_favorite) != 0:
+    insert_into_matr(matr_PaW,list_favorite, 2)
+if len(list_recent) != 0:
+    insert_into_matr(matr_PaW,list_recent, 1)
 
-getFavoriteCategories() # Получаем любимые категории пользователя
-getAveragePrice() # Получаем средний ценник пользователя
-getMatrRecProducts() # Формируем матрицу всех товаров
-analysisByCategories(matrRecProducts) # Оценили категории
-analysisByPrice(matrRecProducts) # Оценка стоимости товара
-analysisByDiscount(matrRecProducts) # Оценка скидки товара
-getListRecProducts(matrRecProducts) # Формируем итоговый список
+get_favorite_categories() # Получаем любимые категории пользователя
+get_average_price() # Получаем средний ценник пользователя
+get_matr_rec_products() # Формируем матрицу всех товаров
+analysis_by_categories(matr_rec_products) # Оценили категории
+analysis_by_price(matr_rec_products) # Оценка стоимости товара
+analysis_by_discount(matr_rec_products) # Оценка скидки товара
+get_list_rec_products(matr_rec_products) # Формируем итоговый список
+
 #endregion
-
-# Выводы
-print(matrPaW)
-print(listIdFromMatrPaW)
-print(averagePrice)
 
 # Закрываем соединение с БД
 connection.close()
