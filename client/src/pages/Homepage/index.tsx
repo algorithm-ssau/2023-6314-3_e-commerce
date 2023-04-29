@@ -1,7 +1,8 @@
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import { ArrowCatalog } from "../../components/heroSectionArrow/ArrowCatalog";
-import { HoverableSVG } from "../../components/heroSectionArrow/HoverableSVG";
+import { ArrowCatalog } from "../../components/HeroSectionArrow/ArrowCatalog";
+import { HoverableSVG } from "../../components/HeroSectionArrow/HoverableSVG";
+import { NewProducts } from "../../components/newProducts/NewProducts";
 import styles from "./Homepage.module.css";
 
 export const Homepage = () => {
@@ -67,6 +68,8 @@ export const Homepage = () => {
           <div className={styles.viewAllBtn}>
             <button className={styles.btn}>Смотреть полностью</button>
           </div>
+
+          <NewProducts />
 
           <div className={styles.flexAbout}>
             <div className={styles.flexPic}>
