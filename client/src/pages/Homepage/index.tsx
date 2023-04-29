@@ -1,13 +1,15 @@
-import { Footer } from "../../components/footer/Footer"
-import { Header } from "../../components/header/Header"
-import styles from "./Homepage.module.css"
+import { Footer } from "../../components/footer/Footer";
+import { Header } from "../../components/header/Header";
+import { ArrowCatalog } from "../../components/heroSectionArrow/ArrowCatalog";
+import { HoverableSVG } from "../../components/heroSectionArrow/HoverableSVG";
+import styles from "./Homepage.module.css";
 
 export const Homepage = () => {
   return (
     <>
       <div className="container">
         <Header />
-          
+
         <main>
           <div className={styles.gridHeroContainer}>
             <div className={styles.gridHeroBottomPicture}>
@@ -21,37 +23,44 @@ export const Homepage = () => {
               <p className={styles.mainP2}>уникальность</p>
             </div>
             <div className={styles.mainP}>
-              <p>Изысканные украшения, которые выгодно дополнят Ваш образ и подчеркнут достоинства</p>
+              <p>
+                Изысканные украшения, которые выгодно дополнят Ваш образ и
+                подчеркнут достоинства
+              </p>
             </div>
-            <button className={styles.btnCatalog}>Каталог
-              <div className={styles.btnArrow}>a</div>
+            <button className={styles.btnCatalog}>
+              Каталог
+              <HoverableSVG />
+              {/* <ArrowCatalog /> */}
             </button>
           </div>
-          
+
           <div>
-            <p className={styles.mainP3}>Изящество - главный секрет нашего бренда</p>
+            <p className={styles.mainP3}>
+              Изящество - главный секрет нашего бренда
+            </p>
           </div>
 
           <div className={styles.gridTilesContainer}>
             <div className={styles.gridTilesItem1}>
-                  <button className={styles.btnImg + ' ' + styles.btn1}></button>
-                  <button className={styles.btnText}>Серьги</button>
+              <button className={styles.btnImg + " " + styles.btn1}></button>
+              <button className={styles.btnText}>Серьги</button>
             </div>
             <div className={styles.gridTilesItem2}>
-                  <button className={styles.btnImg + ' ' + styles.btn2}></button>
-                  <button className={styles.btnText}>Колье</button>
+              <button className={styles.btnImg + " " + styles.btn2}></button>
+              <button className={styles.btnText}>Колье</button>
             </div>
             <div className={styles.gridTilesItem3}>
-                  <button className={styles.btnImg + ' ' + styles.btn3}></button>
-                  <button className={styles.btnText}>Браслеты</button>
+              <button className={styles.btnImg + " " + styles.btn3}></button>
+              <button className={styles.btnText}>Браслеты</button>
             </div>
             <div className={styles.gridTilesItem4}>
-                  <button className={styles.btnImg + ' ' + styles.btn4}></button>
-                  <button className={styles.btnText}>Кольца</button>
+              <button className={styles.btnImg + " " + styles.btn4}></button>
+              <button className={styles.btnText}>Кольца</button>
             </div>
             <div className={styles.gridTilesItem5}>
-                  <button className={styles.btnImg + ' ' + styles.btn5}></button>
-                  <button className={styles.btnText}>Sale</button>
+              <button className={styles.btnImg + " " + styles.btn5}></button>
+              <button className={styles.btnText}>Sale</button>
             </div>
           </div>
 
@@ -60,23 +69,32 @@ export const Homepage = () => {
           </div>
 
           <div className={styles.flexAbout}>
-              <div className={styles.flexPic}>
-                  <img src="./pic_about.jpg" alt="О нас" />
+            <div className={styles.flexPic}>
+              <img src="./pic_about.jpg" alt="О нас" />
+            </div>
+            <div className={styles.flexText}>
+              <p className={styles.mainP4}>О нас</p>
+              <div className={styles.text}>
+                <p className={styles.textItem}>
+                  Мы — молодой бренд, который радует своих клиентов
+                  качественными украшениями из драгоценных металлов.
+                </p>
+                <p className={styles.textItem}>
+                  Наша цель заключается в том, чтобы подчеркнуть естественную
+                  красоту каждой девушки и подарить чувство стиля и
+                  индивидуальности.
+                </p>
+                <p className={styles.textItem}>
+                  Чтобы выглядеть шикарно, не нужен повод. Пусть красота и
+                  изящество будут постоянными спутниками Вашей жизни!
+                </p>
               </div>
-              <div className={styles.flexText}>
-                  <p className={styles.mainP4}>О нас</p>
-                  <div className={styles.text}>
-                      <p className={styles.textItem}>Мы — молодой бренд, который радует своих клиентов качественными украшениями из драгоценных металлов.</p>
-                      <p className={styles.textItem}>Наша цель заключается в том, чтобы подчеркнуть естественную красоту каждой девушки и подарить чувство стиля и индивидуальности.</p>
-                      <p className={styles.textItem}>Чтобы выглядеть шикарно, не нужен повод. Пусть красота и изящество будут постоянными спутниками Вашей жизни!</p>
-                  </div>
-                  
-              </div>
+            </div>
           </div>
-        </main>   
+        </main>
       </div>
 
       <Footer />
     </>
-  )
-}
+  );
+};
