@@ -1,0 +1,1 @@
+export { DetailedEarrings } from './DetailedEarrings';

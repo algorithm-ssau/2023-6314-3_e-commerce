@@ -1,0 +1,1 @@
+export { DetailedNecklace } from './DetailedNecklace';

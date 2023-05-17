@@ -10,9 +10,9 @@ export const IconBag = () => {
     >
         <path d="M10 9C10 9 10 3 16 3C22 3 22 9 22 9M5 9V29H27V9H5Z" 
         stroke="black" 
-        stroke-width="2" 
-        stroke-linecap="round" 
-        stroke-linejoin="round"/>
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"/>
         
     </svg>
   )

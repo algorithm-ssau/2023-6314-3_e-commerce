@@ -1,0 +1,1 @@
+export { DetailedBracelet } from './DetailedBracelet';

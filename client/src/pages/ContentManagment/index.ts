@@ -1,0 +1,1 @@
+export { ContentManagment } from './ContentManagment';
