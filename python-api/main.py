@@ -46,6 +46,7 @@ with connection.cursor() as cursor:
     id_from_favorite = "SELECT productId FROM favorite_product WHERE userId=" + user_id 
     id_from_recent = "SELECT productId FROM recent_product WHERE userId=" + user_id 
     id_from_purchased = "SELECT productId FROM purchased_product WHERE userId=" + user_id 
+    all_id_from_purchased = "SELECT productId FROM purchased_product"
     id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE ("
     for category in list_favorite_categories:
         id_from_product += "categoryId=" + category + " OR "
@@ -66,6 +67,10 @@ with connection.cursor() as cursor:
 
     cursor.execute(id_from_product)
     list_all_products = cursor.fetchall() ########## Может не работать
+
+    cursor.execute(all_id_from_purchased) 
+    list_all_purchased = cursor.fetchall() ########## Может не работать
+
 cursor.close()
 #endregion
 
@@ -181,14 +186,6 @@ def analysis_by_discount(matr):
         elif 35 < product[2] <= 50:
             product[len(product)-1] += 1
 
-# Формирование matrRecProducts
-def get_matr_rec_products():
-    for product in list_all_products:
-        if product[0] in (list_cart or list_purchased):
-            list_all_products.remove(product)
-        else:
-            product.append(0)
-
 # Оценка товаров по категории
 def analysis_by_categories(matr):
     for product in matr:
@@ -197,7 +194,21 @@ def analysis_by_categories(matr):
             i += 1
         product[len(product)-1] += len(list_favorite_categories) - i
 
-# ДРУГИЕ МЕТОДЫ ОЦЕНКИ
+# Формирование итогового листа рекомендованных товаров для нового пользователя
+def counter_of_id(list):
+    for product in list:
+        if product[0] in (list_cart or list_purchased):
+            list.remove(product)
+        else:
+            product.append(0)
+
+# Формирование matrRecProducts
+def get_matr_rec_products():
+    for product in list_all_products:
+        if product[0] in (list_cart or list_purchased):
+            list_all_products.remove(product)
+        else:
+            product.append(0)
 
 # Формирование итогового листа рекомендованных товаров из матрицы 
 def get_list_rec_products(matr):
@@ -207,23 +218,28 @@ def get_list_rec_products(matr):
 
 #region MAIN
 
-#Формируем MatrPaW
-if len(list_purchased) != 0:
-    insert_into_matr(matr_PaW,list_purchased, 4)
-if len(list_cart) != 0:
-    insert_into_matr(matr_PaW,list_cart, 3)
-if len(list_favorite) != 0:
-    insert_into_matr(matr_PaW,list_favorite, 2)
-if len(list_recent) != 0:
-    insert_into_matr(matr_PaW,list_recent, 1)
+if (len(list_purchased) == 0) and (len(list_cart) == 0) and (len(list_favorite) == 0) and (len(list_recent) == 0):
+    insert_into_matr(matr_rec_products, list_all_purchased, 1)
+    get_list_rec_products(matr_rec_products)
 
-get_favorite_categories() # Получаем любимые категории пользователя
-get_average_price() # Получаем средний ценник пользователя
-get_matr_rec_products() # Формируем матрицу всех товаров
-analysis_by_categories(matr_rec_products) # Оценили категории
-analysis_by_price(matr_rec_products) # Оценка стоимости товара
-analysis_by_discount(matr_rec_products) # Оценка скидки товара
-get_list_rec_products(matr_rec_products) # Формируем итоговый список
+else:
+#Формируем MatrPaW
+    if len(list_purchased) != 0:
+        insert_into_matr(matr_PaW,list_purchased, 4)
+    if len(list_cart) != 0:
+        insert_into_matr(matr_PaW,list_cart, 3)
+    if len(list_favorite) != 0:
+        insert_into_matr(matr_PaW,list_favorite, 2)
+    if len(list_recent) != 0:
+        insert_into_matr(matr_PaW,list_recent, 1)
+
+    get_favorite_categories() # Получаем любимые категории пользователя
+    get_average_price() # Получаем средний ценник пользователя
+    get_matr_rec_products() # Формируем матрицу всех товаров
+    analysis_by_categories(matr_rec_products) # Оценили категории
+    analysis_by_price(matr_rec_products) # Оценка стоимости товара
+    analysis_by_discount(matr_rec_products) # Оценка скидки товара
+    get_list_rec_products(matr_rec_products) # Формируем итоговый список
 
 #endregion
 
