@@ -6,7 +6,7 @@ dotenv.load_dotenv('config.env')
 
 #region Инициализация переменных
     #id пользователя
-user_id = int(0)
+user_id = str(1)
     # Лист со всеми id из matrPaW
 list_id_from_matr_PaW = []
     # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
@@ -46,11 +46,7 @@ with connection.cursor() as cursor:
     id_from_favorite = "SELECT productId FROM favorite_product WHERE userId=" + user_id 
     id_from_recent = "SELECT productId FROM recent_product WHERE userId=" + user_id 
     id_from_purchased = "SELECT productId FROM purchased_product WHERE userId=" + user_id 
-    all_id_from_purchased = "SELECT productId FROM purchased_product"
-    id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE ("
-    for category in list_favorite_categories:
-        id_from_product += "categoryId=" + category + " OR "
-    id_from_product = id_from_product[:(len(id_from_product)-4)] + ") AND userId=" + user_id 
+    all_id_from_purchased = "SELECT productId FROM purchased_product" 
 
     # Выполнение запроса и присвоение результа спискам.
     cursor.execute(id_from_cart) 
@@ -64,9 +60,6 @@ with connection.cursor() as cursor:
 
     cursor.execute(id_from_purchased)
     list_purchased = cursor.fetchall() ########## Может не работать
-
-    cursor.execute(id_from_product)
-    list_all_products = cursor.fetchall() ########## Может не работать
 
     cursor.execute(all_id_from_purchased) 
     list_all_purchased = cursor.fetchall() ########## Может не работать
@@ -204,6 +197,17 @@ def counter_of_id(list):
 
 # Формирование matrRecProducts
 def get_matr_rec_products():
+    #Формирование list_all_products
+    with connection.cursor() as cursor: 
+        id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE ("
+        for category in list_favorite_categories:
+            id_from_product += "categoryId=" + category + " OR "
+        id_from_product = id_from_product[:(len(id_from_product)-4)] + ") AND userId=" + user_id
+    
+        cursor.execute(id_from_product)
+        list_all_products = cursor.fetchall() ########## Может не работать    
+    cursor.close()
+
     for product in list_all_products:
         if product[0] in (list_cart or list_purchased):
             list_all_products.remove(product)
@@ -221,6 +225,10 @@ def get_list_rec_products(matr):
 if (len(list_purchased) == 0) and (len(list_cart) == 0) and (len(list_favorite) == 0) and (len(list_recent) == 0):
     insert_into_matr(matr_rec_products, list_all_purchased, 1)
     get_list_rec_products(matr_rec_products)
+    
+    test = get_list_rec_products(matr_rec_products)
+    res = test[:4]
+    print(res) 
 
 else:
 #Формируем MatrPaW
@@ -241,7 +249,11 @@ else:
     analysis_by_discount(matr_rec_products) # Оценка скидки товара
     get_list_rec_products(matr_rec_products) # Формируем итоговый список
 
-#endregion
+    test = get_list_rec_products(matr_rec_products)
+    print(test) 
+    res = test[:4]
+    print(res)
 
+#endregion
 # Закрываем соединение с БД
 connection.close()
