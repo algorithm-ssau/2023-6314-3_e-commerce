@@ -6,7 +6,7 @@ dotenv.load_dotenv('config.env')
 
 #region Инициализация переменных
     #id пользователя
-user_id = str(1)
+user_id = str(2)
     # Лист со всеми id из matrPaW
 list_id_from_matr_PaW = []
     # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
@@ -37,6 +37,12 @@ try:
     print("Succesfull")
 except:
     print("Сonnection is not established")
+    
+def get_productId_from_list(list):
+    new_list = []
+    for elem in list:
+        new_list.append(elem['productId'])
+    return new_list
 
 # Предполагаем, что fetchall & fetchone при запросе единственного значения возвращает строку, а при запросе одинаковых значений
 # например только id - возвращает массив  
@@ -50,20 +56,24 @@ with connection.cursor() as cursor:
 
     # Выполнение запроса и присвоение результа спискам.
     cursor.execute(id_from_cart) 
-    list_cart = cursor.fetchall() ########## Может не работать
+    temp_list_cart = cursor.fetchall()
+    list_cart = get_productId_from_list(temp_list_cart)
 
     cursor.execute(id_from_favorite)
-    list_favorite = cursor.fetchall() ########## Может не работать
+    temp_list_favorite = cursor.fetchall()
+    list_favorite = get_productId_from_list(temp_list_favorite)
 
     cursor.execute(id_from_recent)
-    list_recent = cursor.fetchall() ########## Может не работать
+    temp_list_recent = cursor.fetchall()
+    list_recent = get_productId_from_list(temp_list_recent)
 
     cursor.execute(id_from_purchased)
-    list_purchased = cursor.fetchall() ########## Может не работать
+    temp_list_purchased = cursor.fetchall()
+    list_purchased = get_productId_from_list(temp_list_purchased)
 
     cursor.execute(all_id_from_purchased) 
-    list_all_purchased = cursor.fetchall() ########## Может не работать
-
+    tempp_list_all_purchased = cursor.fetchall()
+    list_all_purchased = get_productId_from_list(tempp_list_all_purchased)
 cursor.close()
 #endregion
 
@@ -250,9 +260,9 @@ else:
     get_list_rec_products(matr_rec_products) # Формируем итоговый список
 
     test = get_list_rec_products(matr_rec_products)
-    print(test) 
+    #print(test) 
     res = test[:4]
-    print(res)
+    #print(res)
 
 #endregion
 # Закрываем соединение с БД
