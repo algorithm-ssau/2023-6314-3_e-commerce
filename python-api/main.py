@@ -18,7 +18,7 @@ matr_rec_products = []
     # Лист id рекомендованных товаров
 list_rec_products = []
     # Средня цена товаров в прошлых покупках, корзине, избранном
-average_price = int(0)
+average_price = float()
     # matrix of ProductId and Weights - матрица id продуктов и весов
 matr_PaW = []
 
@@ -125,7 +125,7 @@ def get_favorite_categories():
         for id in list_id_from_matr_PaW:
             sql_product_categoryid = "SELECT categoryId FROM product WHERE id=" + str(id)
             cursor.execute(sql_product_categoryid) 
-            product_categoryid = cursor.fetchone() ########## Может не работать
+            product_categoryid = cursor.fetchone()['categoryId']
             category_in_matr_PaW.append(product_categoryid)
     cursor.close()
     # Составляем матрицу весов каждой категории
@@ -140,18 +140,19 @@ def get_favorite_categories():
 
 # Получение средней цены товара, на основе прошлых покупок, корзины и избранного.
 def get_average_price():
-    price_in_list_of_id_for_AVG_price = []
+    list_of_id_for_AVG_price = []
     temp = list_cart + list_favorite + list_purchased
     for id in temp:
-        if id not in price_in_list_of_id_for_AVG_price:
-            price_in_list_of_id_for_AVG_price.append(id)
+        if id not in list_of_id_for_AVG_price:
+            list_of_id_for_AVG_price.append(id)
+    price_in_list_of_id_for_AVG_price = float(0)
     with connection.cursor() as cursor: 
         for id in list_of_id_for_AVG_price:
             sqlPrice = "SELECT price FROM product WHERE id=" + str(id)
-            cursor.execute(sqlPrice) 
-            price_in_list_of_id_for_AVG_price += cursor.fetchone()
-    cursor.close() 
-    average_price = sum(price_in_list_of_id_for_AVG_price)/len(price_in_list_of_id_for_AVG_price)
+            cursor.execute(sqlPrice)
+            price_in_list_of_id_for_AVG_price += float(cursor.fetchone()['price'])
+    cursor.close()
+    average_price = price_in_list_of_id_for_AVG_price/len(list_of_id_for_AVG_price)
     return average_price
 
 # Оценка товара по стоимости
@@ -207,22 +208,24 @@ def counter_of_id(list):
 
 # Формирование matrRecProducts
 def get_matr_rec_products():
-    #Формирование list_all_products
+    #Формирование matr_rec_products - списка всех товаров, которые можно будет рекомендовать
     with connection.cursor() as cursor: 
         id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE ("
         for category in list_favorite_categories:
-            id_from_product += "categoryId=" + category + " OR "
-        id_from_product = id_from_product[:(len(id_from_product)-4)] + ") AND userId=" + user_id
-    
+            id_from_product += "categoryId=" + str(category) + " OR "
+        id_from_product = id_from_product[:(len(id_from_product)-4)] + ")"
         cursor.execute(id_from_product)
-        list_all_products = cursor.fetchall() ########## Может не работать    
+        temp_matr_rec_products = cursor.fetchall()
+        # Достаём id,price,discount,categoryId из temp_matr_rec_products и вместе с weight=0 помещаем в matr_rec_products в виде списков
+        for product in temp_matr_rec_products:
+            matr_rec_products.append([product['id'], product['price'], product['discount'], product['categoryId'], 0])
     cursor.close()
-
-    for product in list_all_products:
+    print(matr_rec_products)
+    # Если товар лежит у пользователя в корзине или уже был куплен -> удаляем его из списка
+    for product in matr_rec_products:
         if product[0] in (list_cart or list_purchased):
-            list_all_products.remove(product)
-        else:
-            product.append(0)
+            matr_rec_products.remove(product)
+    print(matr_rec_products)
 
 # Формирование итогового листа рекомендованных товаров из матрицы 
 def get_list_rec_products(matr):
@@ -259,10 +262,11 @@ else:
     analysis_by_discount(matr_rec_products) # Оценка скидки товара
     get_list_rec_products(matr_rec_products) # Формируем итоговый список
 
+
     test = get_list_rec_products(matr_rec_products)
-    #print(test) 
+    print(test) 
     res = test[:4]
-    #print(res)
+    print(res)
 
 #endregion
 # Закрываем соединение с БД
