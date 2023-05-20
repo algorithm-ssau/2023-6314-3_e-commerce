@@ -6,7 +6,7 @@ dotenv.load_dotenv('config.env')
 
 #region Инициализация переменных
     #id пользователя
-user_id = str(2)
+user_id = str(11)
     # Лист со всеми id из matrPaW
 list_id_from_matr_PaW = []
     # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
@@ -220,9 +220,11 @@ def get_matr_rec_products():
         for product in temp_matr_rec_products:
             matr_rec_products.append([product['id'], product['price'], product['discount'], product['categoryId'], 0])
     cursor.close()
-    print(matr_rec_products)
+
+    #temp_list список-копия matr_rec_products
+    temp_list = matr_rec_products.copy()
     # Если товар лежит у пользователя в корзине или уже был куплен -> удаляем его из списка
-    for product in matr_rec_products:
+    for product in temp_list:
         if product[0] in (list_cart or list_purchased):
             matr_rec_products.remove(product)
     print(matr_rec_products)
@@ -266,7 +268,7 @@ else:
     test = get_list_rec_products(matr_rec_products)
     print(test) 
     res = test[:4]
-    print(res)
+    #print(res)
 
 #endregion
 # Закрываем соединение с БД
