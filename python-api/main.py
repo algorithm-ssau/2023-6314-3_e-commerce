@@ -1,12 +1,13 @@
 import os
 import dotenv
 import pymysql
+import random
 
 dotenv.load_dotenv('config.env')
 
 #region Инициализация переменных
-    #id пользователя
-user_id = str(11)
+    #id пользователя (указано для локального теста, оригнальное значение user_id = str())
+user_id = str(55)
     # Лист со всеми id из matrPaW
 list_id_from_matr_PaW = []
     # Лист категорий, расположенных в порядке уменьшения популярности у пользователя
@@ -37,43 +38,53 @@ try:
     print("Succesfull")
 except:
     print("Сonnection is not established")
-    
-def get_productId_from_list(list):
-    new_list = []
-    for elem in list:
-        new_list.append(elem['productId'])
-    return new_list
 
-# Предполагаем, что fetchall & fetchone при запросе единственного значения возвращает строку, а при запросе одинаковых значений
-# например только id - возвращает массив  
+#Преобразование полученых из курсора данных в list
+def get_productId_from_list(list, flag):
+    new_list = []
+    if (flag == 0):
+        for elem in list:
+            new_list.append(elem['productId'])
+        return new_list
+    else:
+        for elem in list:
+            new_list.append(elem['id'])
+        return new_list
+
 #region SQLзапросы 
 with connection.cursor() as cursor: 
     id_from_cart = "SELECT productId FROM added_to_cart_product WHERE userId=" + user_id 
     id_from_favorite = "SELECT productId FROM favorite_product WHERE userId=" + user_id 
     id_from_recent = "SELECT productId FROM recent_product WHERE userId=" + user_id 
     id_from_purchased = "SELECT productId FROM purchased_product WHERE userId=" + user_id 
-    all_id_from_purchased = "SELECT productId FROM purchased_product" 
+    all_id_from_purchased = "SELECT productId FROM purchased_product JOIN product on purchased_product.productId = product.id WHERE product.count > 0"
+    all_id_from_product = "SELECT id FROM product WHERE count > 0" 
 
     # Выполнение запроса и присвоение результа спискам.
     cursor.execute(id_from_cart) 
     temp_list_cart = cursor.fetchall()
-    list_cart = get_productId_from_list(temp_list_cart)
+    list_cart = get_productId_from_list(temp_list_cart, 0)
 
     cursor.execute(id_from_favorite)
     temp_list_favorite = cursor.fetchall()
-    list_favorite = get_productId_from_list(temp_list_favorite)
+    list_favorite = get_productId_from_list(temp_list_favorite, 0)
 
     cursor.execute(id_from_recent)
     temp_list_recent = cursor.fetchall()
-    list_recent = get_productId_from_list(temp_list_recent)
+    list_recent = get_productId_from_list(temp_list_recent, 0)
 
     cursor.execute(id_from_purchased)
     temp_list_purchased = cursor.fetchall()
-    list_purchased = get_productId_from_list(temp_list_purchased)
+    list_purchased = get_productId_from_list(temp_list_purchased, 0)
 
     cursor.execute(all_id_from_purchased) 
-    tempp_list_all_purchased = cursor.fetchall()
-    list_all_purchased = get_productId_from_list(tempp_list_all_purchased)
+    temp_list_all_purchased = cursor.fetchall()
+    list_all_purchased = get_productId_from_list(temp_list_all_purchased, 0)
+
+    cursor.execute(all_id_from_product) 
+    temp_list_all_product = cursor.fetchall()
+    list_all_product = get_productId_from_list(temp_list_all_product, 1)
+
 cursor.close()
 #endregion
 
@@ -210,10 +221,11 @@ def counter_of_id(list):
 def get_matr_rec_products():
     #Формирование matr_rec_products - списка всех товаров, которые можно будет рекомендовать
     with connection.cursor() as cursor: 
-        id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE ("
+        id_from_product = "SELECT id,price,discount,categoryId FROM product WHERE (count>0 and ("
         for category in list_favorite_categories:
             id_from_product += "categoryId=" + str(category) + " OR "
-        id_from_product = id_from_product[:(len(id_from_product)-4)] + ")"
+        id_from_product = id_from_product[:(len(id_from_product)-4)] + "))"
+        print(id_from_product)
         cursor.execute(id_from_product)
         temp_matr_rec_products = cursor.fetchall()
         # Достаём id,price,discount,categoryId из temp_matr_rec_products и вместе с weight=0 помещаем в matr_rec_products в виде списков
@@ -236,40 +248,52 @@ def get_list_rec_products(matr):
     return list_rec_products
 
 #region MAIN
+try:
+    # Случай для "нулевого" пользователя
+    # Если все списки пользователя пусты, и нет проданных товаров случайно выбираем рекомендации из всех товаров в бд
+    if (len(list_all_purchased) == 0) and (len(list_purchased) == 0) and (len(list_cart) == 0) and (len(list_favorite) == 0) and (len(list_recent) == 0):
+        res = random.sample(list_all_product, 4)
+        print(res)
 
-if (len(list_purchased) == 0) and (len(list_cart) == 0) and (len(list_favorite) == 0) and (len(list_recent) == 0):
-    insert_into_matr(matr_rec_products, list_all_purchased, 1)
-    get_list_rec_products(matr_rec_products)
-    
-    test = get_list_rec_products(matr_rec_products)
-    res = test[:4]
-    print(res) 
+    # Случай для нового пользователя
+    # Рекомендации строятся на основе покупок других пользователей
+    elif (len(list_all_purchased) >= 4) and (len(list_purchased) == 0) and (len(list_cart) == 0) and (len(list_favorite) == 0) and (len(list_recent) == 0):
+        insert_into_matr(matr_rec_products, list_all_purchased, 1)
+        get_list_rec_products(matr_rec_products)
+        
+        test = get_list_rec_products(matr_rec_products)
+        res = test[:4]
+        print(res) 
 
-else:
-#Формируем MatrPaW
-    if len(list_purchased) != 0:
-        insert_into_matr(matr_PaW,list_purchased, 4)
-    if len(list_cart) != 0:
-        insert_into_matr(matr_PaW,list_cart, 3)
-    if len(list_favorite) != 0:
-        insert_into_matr(matr_PaW,list_favorite, 2)
-    if len(list_recent) != 0:
-        insert_into_matr(matr_PaW,list_recent, 1)
+    # Случай для обыного пользователя
+    else:
+    #Формируем MatrPaW
+        if len(list_purchased) != 0:
+            insert_into_matr(matr_PaW,list_purchased, 4)
+        if len(list_cart) != 0:
+            insert_into_matr(matr_PaW,list_cart, 3)
+        if len(list_favorite) != 0:
+            insert_into_matr(matr_PaW,list_favorite, 2)
+        if len(list_recent) != 0:
+            insert_into_matr(matr_PaW,list_recent, 1)
 
-    get_favorite_categories() # Получаем любимые категории пользователя
-    get_average_price() # Получаем средний ценник пользователя
-    get_matr_rec_products() # Формируем матрицу всех товаров
-    analysis_by_categories(matr_rec_products) # Оценили категории
-    analysis_by_price(matr_rec_products) # Оценка стоимости товара
-    analysis_by_discount(matr_rec_products) # Оценка скидки товара
-    get_list_rec_products(matr_rec_products) # Формируем итоговый список
+        get_favorite_categories() # Получаем любимые категории пользователя
+        get_average_price() # Получаем средний ценник пользователя
+        get_matr_rec_products() # Формируем матрицу всех товаров
+        analysis_by_categories(matr_rec_products) # Оценили категории
+        analysis_by_price(matr_rec_products) # Оценка стоимости товара
+        analysis_by_discount(matr_rec_products) # Оценка скидки товара
+        get_list_rec_products(matr_rec_products) # Формируем итоговый список
 
 
-    test = get_list_rec_products(matr_rec_products)
-    print(test) 
-    res = test[:4]
-    #print(res)
-
+        test = get_list_rec_products(matr_rec_products)
+        res = test[:4]
+        print(res)
+        
+# В случаи ошибки возвращаются 4 случайных товара из списка всех товаров 
+except:
+    res = random.sample(list_all_product, 4)
+    print(res)
 #endregion
 # Закрываем соединение с БД
 connection.close()
