@@ -43,3 +43,11 @@
   cursor: pointer;
   line-height: 3em;
 }
+
+.line{  
+    background: white;
+    color: white;
+    /* borderColor: white; */
+    height: 3px;
+    width: 100%;
+}

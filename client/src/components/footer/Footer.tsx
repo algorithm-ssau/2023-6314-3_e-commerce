@@ -30,7 +30,9 @@ export const Footer = () => {
       </div>
       {/* <span>asdfhj</span> */}
       <div className="container footerContainer">
-        df
+      <hr className={styles.line}
+        
+      />
       </div>
     </footer>
   );
