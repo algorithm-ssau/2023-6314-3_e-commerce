@@ -57,3 +57,11 @@
   justify-content: space-between;
   flex-direction: row;
 }
+
+.footerLink2{
+  font-size: var(--fs-sec-body);
+}
+
+.footerLink{
+  font-size: 1rem;
+}

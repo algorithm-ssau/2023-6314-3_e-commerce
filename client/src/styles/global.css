@@ -20,7 +20,7 @@ a {
 
 * {
   box-sizing: border-box;
-  outline: 1px solid magenta;
+  /* outline: 1px solid magenta; */
 }
 
 ul {
