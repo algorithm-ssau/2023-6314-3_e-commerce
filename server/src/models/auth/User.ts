@@ -17,7 +17,7 @@ import { PurchasedProduct } from '../Product/PurchasedProduct.js';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column('text')
@@ -26,7 +26,10 @@ export class User {
   @Column('text')
   password: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    unique: true,
+  })
   email: string;
 
   @Column({
@@ -39,7 +42,10 @@ export class User {
   @JoinTable()
   roles: Relation<Role>[];
 
-  @OneToOne(() => Token, (token) => token.user)
+  @OneToOne(() => Token, (token) => token.user, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn()
   token: Relation<Token>;
 
