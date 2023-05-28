@@ -50,7 +50,7 @@ li {
   font-family: var(--ff-secondary);
   font-size: var(--fs-sec-body);
   margin-top: 3em;
-  margin-bottom: 0;
+  margin-bottom: 2em;
 }
 
 footer {

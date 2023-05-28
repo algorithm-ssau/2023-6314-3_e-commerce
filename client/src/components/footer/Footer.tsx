@@ -26,6 +26,11 @@ export const Footer = () => {
         <div className={styles.footerSection}>
           <button className={styles.btn}>Каталог</button>
         </div>
+        
+      </div>
+      {/* <span>asdfhj</span> */}
+      <div className="container footerContainer">
+        df
       </div>
     </footer>
   );

@@ -6,13 +6,17 @@
   /* height: 15em; */
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   color: white;
+  margin: 0 0;
+
 }
 
 .footerSection {
+  display: flex;
   height: 100%;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .footerSection.footerLogo {
@@ -37,4 +41,5 @@
 .footerItem {
   padding: 0 1.25em;
   cursor: pointer;
+  line-height: 3em;
 }
