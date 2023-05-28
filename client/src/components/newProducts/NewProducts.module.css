@@ -19,6 +19,9 @@
 .arrows {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+}
+
+.arrowsItem {
+  padding: 0 1.25em;
 }

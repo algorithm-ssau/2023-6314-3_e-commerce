@@ -9,8 +9,12 @@ export const NewProducts = () => {
       <div className={styles.flexHeader}>
         <p className={styles.p4}>Наши новинки</p>
         <div className={styles.arrows}>
-          <ArrowLeft />
-          <ArrowRight />
+          <div className={styles.arrowsItem}>
+            <ArrowLeft />
+          </div>
+          <div className={styles.arrowsItem}>
+            <ArrowRight />
+          </div>
         </div>
         {/* in this place must be added two arrows */}
       </div>
