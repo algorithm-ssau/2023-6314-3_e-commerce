@@ -35,9 +35,13 @@ export const Footer = () => {
 
       </div>
       <div className={"container footerContainer " + styles.middleContainer}>
-        <hr className={styles.line}
-        
+        <hr className={styles.line}      
         />
+      </div>
+      <div className={"container footerContainer " + styles.middleContainer}>
+        <a className={styles.footerLink2} href="#"> Сайт создан с образовательной целью </a>
+        <a className={styles.footerLink2} href="https://www.behance.net/tepless"> Разработка сайта  </a>
+
       </div>
     </footer>
   );
