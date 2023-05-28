@@ -20,7 +20,7 @@ a {
 
 * {
   box-sizing: border-box;
-  /* outline: 1px solid magenta; */
+  outline: 1px solid magenta;
 }
 
 ul {
@@ -49,8 +49,8 @@ li {
   text-align: center;
   font-family: var(--ff-secondary);
   font-size: var(--fs-sec-body);
-  margin-top: 3em;
-  margin-bottom: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 footer {

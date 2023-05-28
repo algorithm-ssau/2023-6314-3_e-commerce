@@ -29,10 +29,15 @@ export const Footer = () => {
         
       </div>
       {/* <span>asdfhj</span> */}
-      <div className="container footerContainer">
-      <hr className={styles.line}
+      <div className={"container footerContainer " + styles.middleContainer}>
+        <a className={styles.footerLink} href="#"> Политика конфиденциальности </a>
+        <a className={styles.footerLink} href="#"> Вход для менеджера  </a>
+
+      </div>
+      <div className={"container footerContainer " + styles.middleContainer}>
+        <hr className={styles.line}
         
-      />
+        />
       </div>
     </footer>
   );
