@@ -1,5 +1,5 @@
 import styles from "./NewProducts.module.css";
-import { Product } from "./Product";
+import { Product } from "./Product/Product";
 
 export const NewProducts = () => {
   return (
