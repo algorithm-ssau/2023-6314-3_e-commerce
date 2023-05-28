@@ -1,0 +1,32 @@
+@import './../../../styles/variables.css'; 
+
+.productImg {
+  position: relative;
+  cursor: pointer;
+}
+
+.divNew {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  padding: 0.2em 0.5em;
+  background-color: #fff;
+}
+
+.divNew .descP {
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-sec-body);
+  margin: 0;
+}
+
+.description .price {
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-body);
+  margin: 0.5em;
+}
+
+.description .text {
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-sec-body);
+  margin: 0.5em;
+}

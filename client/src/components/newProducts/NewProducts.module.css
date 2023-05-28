@@ -1,0 +1,27 @@
+@import "./../../styles/variables.css";
+
+.flexHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.p4 {
+  font-family: var(--ff-primary);
+  font-size: var(--fs-h2);
+  letter-spacing: 0.1rem;
+}
+
+.products {
+  display: flex;
+  justify-content: space-between;
+}
+
+.arrows {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.arrowsItem {
+  padding: 0 1.25em;
+}

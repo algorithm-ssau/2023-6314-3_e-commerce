@@ -1,0 +1,40 @@
+@import "./../../styles/variables.css";
+
+.footer {
+  background-color: #3b2d2d;
+  width: 100%;
+  /* height: 15em; */
+  display: flex;
+  flex-direction: row;
+  color: white;
+}
+
+.footerSection {
+  height: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footerSection.footerLogo {
+  font-family: var(--ff-primary);
+  font-size: var(--fs-body);
+}
+
+.footerSection .btn {
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-sec-body);
+  background-color: #fff;
+  padding: 1em;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+
+.footerSection .btn:hover {
+  background-color: #3b2d2d;
+  color: #fff;
+}
+
+.footerItem {
+  padding: 0 1.25em;
+  cursor: pointer;
+}
