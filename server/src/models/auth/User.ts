@@ -14,7 +14,6 @@ import { Token } from './Token.js';
 import { FavoriteProduct } from '../Product/FavoriteProduct.js';
 import { AddedToCartProduct } from '../Product/AddedToCartProduct.js';
 import { PurchasedProduct } from '../Product/PurchasedProduct.js';
-import { RecentProduct } from '../Product/RecentProduct.js';
 
 @Entity()
 export class User {
@@ -29,6 +28,12 @@ export class User {
 
   @Column('text')
   email: string;
+
+  @Column({
+    type: 'text',
+    default: 'public/images/default-avatar.jpg',
+  })
+  avatarURL: string;
 
   @ManyToMany(() => Role, (role) => role.users)
   @JoinTable()
@@ -49,8 +54,4 @@ export class User {
   @OneToMany(() => PurchasedProduct, (purchasedProduct) => purchasedProduct.user)
   @JoinColumn()
   purchasedProducts: Relation<PurchasedProduct>[];
-
-  @OneToMany(() => RecentProduct, (recentProduct) => recentProduct.user)
-  @JoinColumn()
-  recentProducts: Relation<RecentProduct>[];
 }

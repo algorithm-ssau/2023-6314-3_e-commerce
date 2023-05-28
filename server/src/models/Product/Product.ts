@@ -3,7 +3,6 @@ import { ProductCategory } from './ProductCategory.js';
 import { FavoriteProduct } from './FavoriteProduct.js';
 import { AddedToCartProduct } from './AddedToCartProduct.js';
 import { PurchasedProduct } from './PurchasedProduct.js';
-import { RecentProduct } from './RecentProduct.js';
 
 @Entity()
 export class Product {
@@ -13,7 +12,7 @@ export class Product {
   @Column('text')
   name: string;
 
-  @Column('double')
+  @Column('decimal')
   price: number;
 
   @Column('text')
@@ -45,7 +44,4 @@ export class Product {
 
   @OneToMany(() => PurchasedProduct, (purchasedProduct) => purchasedProduct.product)
   purchasedProductsUsers: Relation<PurchasedProduct>[];
-
-  @OneToMany(() => RecentProduct, (recentProduct) => recentProduct.product)
-  recentProductsUsers: Relation<RecentProduct>[];
 }
