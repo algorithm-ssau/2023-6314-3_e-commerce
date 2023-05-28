@@ -1,4 +1,6 @@
+import { HoverableSVG } from "../HeroSectionArrow/HoverableSVG";
 import styles from "./Footer.module.css";
+
 
 export const Footer = () => {
   return (
@@ -24,7 +26,10 @@ export const Footer = () => {
           </a>
         </div>
         <div className={styles.footerSection}>
-          <button className={styles.btn}>Каталог</button>
+          <button className={styles.btn}>Каталог
+          <HoverableSVG />
+          </button>
+          
         </div>
         
       </div>
