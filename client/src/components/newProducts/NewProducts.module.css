@@ -15,3 +15,10 @@
   display: flex;
   justify-content: space-between;
 }
+
+.arrows {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
