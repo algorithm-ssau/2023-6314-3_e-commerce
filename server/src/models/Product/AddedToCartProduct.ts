@@ -4,7 +4,7 @@ import { Product } from './Product.js';
 
 @Entity()
 export class AddedToCartProduct {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column()

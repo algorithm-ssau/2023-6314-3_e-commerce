@@ -17,8 +17,6 @@ class UserController {
   async getOne(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      console.log(id);
-      // console.log(userService.getOne(+id));
       const user = await userService.getOne(+id);
       res.json(user);
     } catch (err) {
@@ -30,7 +28,7 @@ class UserController {
     try {
       const { password, name, email, avatarURL } = req.body;
       const userDto = new CreateUserDto(password, name, email, avatarURL);
-      console.log('in controller before register(userDto');
+      
       const userData = await userService.register(userDto);
 
       res.cookie('refreshToken', userData.tokens.refreshToken, {

@@ -4,7 +4,7 @@ import { Product } from './Product.js';
 
 @Entity()
 export class FavoriteProduct {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @ManyToOne(() => User, (user) => user.favoriteProducts)

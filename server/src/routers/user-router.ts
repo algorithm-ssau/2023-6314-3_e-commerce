@@ -10,6 +10,6 @@ userRouter.post('/refresh-token', userController.refreshToken);
 userRouter.post('/logout', userController.logout);
 userRouter.get('/:id', userController.getOne); 
 userRouter.patch('/:id', userController.update); 
-userRouter.delete('/:id', userController.delete); // в ответе возвращать об успешности операции
+userRouter.delete('/:id', userController.delete); 
 
 export default userRouter;

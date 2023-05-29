@@ -3,7 +3,7 @@ import { User } from './User.js';
 
 @Entity()
 export class Role {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column({ type: 'text', unique: true })

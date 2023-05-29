@@ -3,7 +3,7 @@ import { Product } from './Product.js';
 
 @Entity()
 export class ProductCategory {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column('text')

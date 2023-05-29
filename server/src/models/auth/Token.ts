@@ -3,7 +3,7 @@ import { User } from './User.js';
 
 @Entity()
 export class Token {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column('text')

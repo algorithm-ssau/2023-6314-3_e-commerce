@@ -18,9 +18,15 @@ class ApiError extends Error {
   }
 
   static NotFound(message?: string) {
-    if (message) return new ApiError(400, message);
+    if (message) return new ApiError(404, message);
 
-    return new ApiError(400, `Not Found`);
+    return new ApiError(404, `Not Found`);
+  }
+
+  static Forbidden(message?: string) {
+    if (message) return new ApiError(403, message);
+
+    return new ApiError(403, `Forbidden`);
   }
 
   static InternalError(message?: string) {

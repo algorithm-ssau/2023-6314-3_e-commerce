@@ -6,7 +6,7 @@ import { PurchasedProduct } from './PurchasedProduct.js';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('identity')
   id: number;
 
   @Column('text')
@@ -28,7 +28,7 @@ export class Product {
   discount: number;
 
   @Column('integer', { nullable: true })
-  size: number;
+  size?: number;
 
   @Column('integer')
   count: number;
