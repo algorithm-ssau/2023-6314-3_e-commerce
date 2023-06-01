@@ -1,0 +1,112 @@
+@import "./../../styles/variables.css";
+
+.container {
+  display: flex;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.picturesContainer {
+  width: 50%;
+  position: relative;
+}
+
+.backgroundPicture {
+  height: 88vh;
+}
+
+.frontPicture {
+  position: absolute;
+  height: 40%;
+  top: 38%;
+  right: 0;
+  transform: translateX(60%);
+}
+
+.title {
+  font-family: var(--ff-primary);
+  font-size: var(--fs-h1);
+  letter-spacing: 0.2rem;
+  margin: 0;
+  margin-left: .75em;
+  margin-top: 2em;
+  font-weight: 400;
+  width: max-content;
+}
+
+.titleSecondLine {
+  margin-left: 3.75em;
+  display: block;
+}
+
+.subtitle {
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-body);
+  transform: translateX(90px);
+  margin-top: 2em;
+}
+
+.toCatalog {
+  font-family: var(--ff-secondary);
+  font-size: 1.15rem;
+  padding: .5em 1.25em;
+  background-color: #fff;
+  transform: translate(45px, 35px);
+  transition: background-color 0.4s, color 0.4s;
+  border: 2px solid #3b2d2d;
+  cursor: pointer;
+}
+
+.toCatalog:hover {
+  background-color: #3b2d2d;
+  color: #fff;
+}
+
+.toCatalog:hover svg path {
+  fill: #fff;
+}
+
+@media (max-width: 1200px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .toCatalog {
+    font-size: .75rem;
+  }
+
+  .frontPicture {
+    height: 30vh;
+  }
+}
+
+@media (max-width: 870px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .picturesContainer {
+    display: none;
+  }
+
+  .infoContainer {
+    margin-bottom: 1.5em;
+  }
+
+  .toCatalog {
+    transform: translate(20px, 20px);
+  }
+
+  .titleSecondLine {
+    margin-left: 2em;
+  }
+
+  .subtitle {
+    transform: translateX(30px);
+  }
+}

@@ -3,38 +3,99 @@
 .footer {
   background-color: #3b2d2d;
   width: 100%;
-  /* height: 15em; */
   display: flex;
-  flex-direction: row;
   color: white;
+  margin-top: auto;
 }
 
-.footerSection {
-  height: 100%;
+.links {
+  display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  padding: 1em 0;
+  border-bottom: 1px solid #b1abab;
 }
 
-.footerSection.footerLogo {
-  font-family: var(--ff-primary);
-  font-size: var(--fs-body);
+.policy {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
 }
 
-.footerSection .btn {
-  font-family: var(--ff-secondary);
-  font-size: var(--fs-sec-body);
+.policy a:first-child {
+  font-family: Philosopher;
+}
+
+.policy a:nth-child(2) {
+  font-size: .85rem;
+}
+
+.navigation {
+  width: 60%;
+  display: flex;
+  justify-content: space-evenly;
+  margin-right: 3em;
+  flex-wrap: wrap;
+}
+
+.navigation a {
+  margin: .5em;
+}
+
+.catalog {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+
+.catalog a {
+  width: 100%;
+  padding: .5em 1em;
   background-color: #fff;
-  padding: 1em;
-  transition-duration: 0.4s;
-  cursor: pointer;
+  color: #3b2d2d;
 }
 
-.footerSection .btn:hover {
-  background-color: #3b2d2d;
-  color: #fff;
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 2em 0;
 }
 
-.footerItem {
-  padding: 0 1.25em;
-  cursor: pointer;
+.meta p {
+  margin: 0;
+}
+
+@media (max-width: 1250px) {
+  .catalog a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .catalog a svg {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 950px) {
+  .links {
+    flex-direction: column;
+  }
+
+  .policy {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 1.5em;
+  }
+
+  .navigation {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 1.5em;
+  }
+
+  .catalog {
+    display: none;
+  }
 }

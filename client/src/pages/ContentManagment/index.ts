@@ -1,1 +1,0 @@
-export { ContentManagment } from './ContentManagment';

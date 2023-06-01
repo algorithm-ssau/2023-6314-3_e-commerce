@@ -2,11 +2,11 @@
     --ff-primary: 'Philosopher';
     --ff-secondary: 'Montserrat';
 
-    --fs-h1: 4rem;
-    --fs-h2: 3rem;
+    --fs-h1: 3rem;
+    --fs-h2: 2rem;
 
-    --fs-body: 1.5rem;
-    --fs-sec-body: 1.25rem;
+    --fs-body: 1rem;
+    --fs-sec-body: .75rem;
 }
 
 /* main font for headers */

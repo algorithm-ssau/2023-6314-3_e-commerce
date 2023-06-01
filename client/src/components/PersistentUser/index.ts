@@ -1,0 +1,1 @@
+export { PersistentUser } from './PersistentUser';

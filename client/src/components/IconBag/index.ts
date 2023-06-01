@@ -1,0 +1,1 @@
+export { IconBag } from './IconBag';

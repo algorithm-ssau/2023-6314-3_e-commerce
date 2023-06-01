@@ -35,15 +35,15 @@ li {
 }
 
 .container {
-  margin: 1em auto;
-  width: 70%;
+  margin: 0 auto;
+  width: 72%;
   /* min-height: 100%; */
   max-width: 1400px;
   /* display: flex;
   flex-direction: column; */
 }
 
-.container.footerContainer {
+/* .container.footerContainer {
   display: flex;
   justify-content: space-between;
   text-align: center;
@@ -51,7 +51,7 @@ li {
   font-size: var(--fs-sec-body);
   margin-top: 3em;
   margin-bottom: 0;
-}
+} */
 
 footer {
   margin-top: auto;
@@ -59,4 +59,16 @@ footer {
 
 .main {
   flex: 1 1 auto;
+}
+
+@media (max-width: 1000px) {
+  .container {
+    width: 80%;
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    width: 90%;
+  }
 }

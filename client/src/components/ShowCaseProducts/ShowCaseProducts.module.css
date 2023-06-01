@@ -1,0 +1,9 @@
+@import "./../../styles/variables.css";
+
+.title {
+  font-family: var(--ff-primary);
+  font-size: var(--fs-h2);
+  letter-spacing: 0.1rem;
+  font-weight: 400;
+}
+

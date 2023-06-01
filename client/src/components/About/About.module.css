@@ -1,0 +1,47 @@
+@import "./../../styles/variables.css";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin: 5rem 0;
+}
+
+.container .picture img {
+  width: 100%;
+}
+
+.container .aboutInfo {
+  margin-left: 2em;
+}
+
+.container .aboutInfo h3 {
+  font-family: var(--ff-primary);
+  font-size: var(--fs-h2);
+  letter-spacing: 0.1rem;
+}
+
+.container .aboutInfo p {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-family: var(--ff-secondary);
+  font-size: var(--fs-body);
+  max-width: 650px;
+}
+
+@media (max-width: 1100px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .container .picture img {
+    width: 100%;
+    height: 50vh;
+    object-fit: cover;
+  }
+
+  .container .aboutInfo {
+    margin: 0;
+  }
+}

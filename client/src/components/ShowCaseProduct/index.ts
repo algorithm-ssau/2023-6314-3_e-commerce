@@ -1,0 +1,1 @@
+export { ShowCaseProduct } from './ShowCaseProduct';
