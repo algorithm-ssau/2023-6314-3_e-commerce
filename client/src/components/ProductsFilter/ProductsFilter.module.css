@@ -1,0 +1,8 @@
+.line {
+  display: inline-block;
+  width: 15px;
+  height: 2px;
+  transform: translateY(4px);
+  margin: 0 .5em;
+  background-color: #3B2D2D;
+}

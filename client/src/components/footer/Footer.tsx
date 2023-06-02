@@ -23,7 +23,7 @@ export const Footer = () => {
             <Link to="/login">Вход</Link>
           </div>
           <div className={styles.catalog}>
-            <Link to="catalog">
+            <Link to="/products">
               Каталог <RightArrow />
             </Link>
           </div>

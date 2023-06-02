@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+}
+
+.image {
+  aspect-ratio: 9 / 10;
+  height: 55vh;
+  margin-right: 1.5em;
+}
+
+@media (max-width: 940px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .image {
+    height: 50vh;
+    width: 40vh;
+  }
+}

@@ -28,7 +28,7 @@ export const HeroSection = () => {
           выгодно дополнят Ваш образ
           <br />и подчеркнут достоинства
         </p>
-        <Link className={styles.toCatalog} to="/catalog">
+        <Link className={styles.toCatalog} to="/products">
           Каталог
           <RightArrow />
         </Link>
