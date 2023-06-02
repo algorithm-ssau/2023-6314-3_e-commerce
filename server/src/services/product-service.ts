@@ -4,11 +4,17 @@ import { Product } from '../models/Product/Product.js';
 import { ProductDto } from '../dtos/product.dto.js';
 import productCategoryService from './product-category-service.js';
 import ApiError from '../exceptions/ApiError.js';
+import { AddedToCartProduct } from '../models/Product/AddedToCartProduct.js';
+import { User } from '../models/auth/User.js';
 
 class ProductService {
   productRepository: Repository<Product>;
+  addedToCartProductRepository: Repository<AddedToCartProduct>;
+  userRepository: Repository<User>;
   constructor() {
     this.productRepository = AppDataSource.getRepository(Product);
+    this.addedToCartProductRepository = AppDataSource.getRepository(AddedToCartProduct);
+    this.userRepository = AppDataSource.getRepository(User);
   }
 
   getAll() {
@@ -38,7 +44,6 @@ class ProductService {
     product.material = productDto.material;
     product.fineness = productDto.fineness;
     product.discount = productDto.discount;
-    product.count = productDto.count;
     product.size = productDto.size;
 
     const category = await productCategoryService.getCategoryByName(productDto.category);
@@ -79,6 +84,66 @@ class ProductService {
     if (!product) throw ApiError.NotFound(`Not found product with id ${id} `);
 
     return this.productRepository.remove(product);
+  }
+
+  private async findProductInCart(userId: number, productId: number) {
+    const product = await this.productRepository.findOneBy({ id: productId });
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!product) throw ApiError.NotFound(`Not found product with id ${productId} `);
+    if (!user) throw ApiError.NotFound(`Not found user with id ${user} `);
+
+    const productInCart = await this.addedToCartProductRepository.findOneBy({ user, product });
+
+    if (!productInCart)
+      throw ApiError.NotFound(`Not found product in cart with userId ${userId} and productId ${productId}`);
+
+    return productInCart;
+  }
+
+  async addProductToCart(userId: number, productId: number, count: number) {
+    const product = await this.productRepository.findOneBy({ id: productId });
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!product) throw ApiError.NotFound(`Not found product with id ${productId} `);
+    if (!user) throw ApiError.NotFound(`Not found user with id ${userId} `);
+
+    const productToAdd = new AddedToCartProduct();
+    productToAdd.product = product;
+    productToAdd.user = user;
+    productToAdd.count = count;
+    return this.addedToCartProductRepository.save(productToAdd);
+  }
+
+  async removeProductFromCart(userId: number, productId: number) {
+    const productToRemove = await this.findProductInCart(userId, productId);
+
+    if (!productToRemove)
+      throw ApiError.NotFound(`Not found product in cart with userId ${userId} and productId ${productId}`);
+
+    return this.addedToCartProductRepository.remove(productToRemove);
+  }
+
+  async updateProductInCartCount(userId: number, productId: number, newCount: number) {
+    if (newCount <= 0) throw ApiError.BadRequest('Count must be positive number');
+
+    const productToUpdate = await this.findProductInCart(userId, productId);
+
+    productToUpdate.count = newCount;
+    return this.addedToCartProductRepository.save(productToUpdate);
+  }
+
+  async getProductsInCart(userId: number) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    if (!user) throw ApiError.NotFound(`Not found user with id ${userId} `);
+    const productsInCart = await this.addedToCartProductRepository.find({
+      where: {
+        user,
+      },
+      relations: {
+        product: true,
+      },
+    });
+
+    return productsInCart.map((p) => p.product);
   }
 }
 

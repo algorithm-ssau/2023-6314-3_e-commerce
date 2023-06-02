@@ -30,9 +30,6 @@ export class Product {
   @Column('integer', { nullable: true })
   size?: number;
 
-  @Column('integer')
-  count: number;
-
   @ManyToOne(() => ProductCategory, (category) => category.products)
   category: Relation<ProductCategory>;
 

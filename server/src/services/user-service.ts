@@ -77,7 +77,7 @@ class UserService {
     tokenService.saveRefreshToken(savedUser.id, tokens.refreshToken);
     // TODO: make sure that token can be accessed through user entity
     // I'm not sure about this because relation created via tokenRepository
-    const userInfo = new UpdateUserDto(savedUser.name, savedUser.email, savedUser.avatarURL);
+    const userInfo = new ResponseUserDto(savedUser);
     return { tokens, userInfo };
   }
 
@@ -93,7 +93,7 @@ class UserService {
     tokenService.saveRefreshToken(user.id, tokens.refreshToken);
     // TODO: make sure that token can be accessed through user entity
     // I'm not sure about this because relation created via tokenRepository
-    const userInfo = new UpdateUserDto(user.name, user.email, user.avatarURL);
+    const userInfo = new ResponseUserDto(user);
     return { tokens, userInfo };
   }
 
@@ -120,7 +120,7 @@ class UserService {
     const tokens = tokenService.generateTokens({ id: user.id, roles: user.roles.map((r) => r.value) });
     await tokenService.saveRefreshToken(user.id, tokens.refreshToken);
 
-    const userInfo = new UpdateUserDto(user.name, user.email, user.avatarURL);
+    const userInfo = new ResponseUserDto(user);
     return { tokens, userInfo };
   }
 
