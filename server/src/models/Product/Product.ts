@@ -18,6 +18,9 @@ export class Product {
   @Column('text')
   material: string;
 
+  @Column('text')
+  photoUrl: string;
+
   @Column('integer')
   fineness: number;
 

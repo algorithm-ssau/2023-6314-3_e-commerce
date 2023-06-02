@@ -45,6 +45,7 @@ class ProductService {
     product.fineness = productDto.fineness;
     product.discount = productDto.discount;
     product.size = productDto.size;
+    product.photoUrl = productDto.photoUrl;
 
     const category = await productCategoryService.getCategoryByName(productDto.category);
 
@@ -100,7 +101,7 @@ class ProductService {
     return productInCart;
   }
 
-  async addProductToCart(userId: number, productId: number, count: number) {
+  async addProductToCart(userId: number, productId: number) {
     const product = await this.productRepository.findOneBy({ id: productId });
     const user = await this.userRepository.findOneBy({ id: userId });
     if (!product) throw ApiError.NotFound(`Not found product with id ${productId} `);
@@ -109,7 +110,7 @@ class ProductService {
     const productToAdd = new AddedToCartProduct();
     productToAdd.product = product;
     productToAdd.user = user;
-    productToAdd.count = count;
+    productToAdd.count = 1;
     return this.addedToCartProductRepository.save(productToAdd);
   }
 

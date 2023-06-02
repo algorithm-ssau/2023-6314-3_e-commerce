@@ -12,7 +12,6 @@ type AuthProviderProps = {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const [auth, setAuth] = useState<Partial<AuthState>>({});
-
 	return (
 		<AuthContext.Provider value={{ auth, setAuth }}>
 			{children}

@@ -1,1 +1,0 @@
-export { DetailedBracelet } from './DetailedBracelet';

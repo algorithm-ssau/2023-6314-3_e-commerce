@@ -9,39 +9,43 @@ import { NotFound } from './pages/NotFound';
 import { Unauthorized } from './pages/Unauthorized';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
-import { DetailedBracelet } from './pages/DetailedBracelet';
+import { DetailedPage } from './pages/DetailedPage';
 import { Account } from './pages/Account';
 import { Cart } from './pages/Cart';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        {/* public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/products" element={<Catalog />} />
-        <Route path="/products/1" element={<DetailedBracelet />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/unauthorized" element={<Unauthorized />} />
+    <>
+      <Toaster />
 
-        {/* we want to protect these routes */}
-        <Route element={<PersistentUser />}>
-          {/* <Route element={<ProtectedRoute allowedRoles={['']} />}>
-						<Route path='/' element={<Catalog />} />
-					</Route> */}
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/products" element={<Catalog />} />
+          <Route path="/products/:id" element={<DetailedPage />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
-          <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
-            <Route path="/content-management" element={<ContentManagement />} />
+          <Route element={<PersistentUser />}>
+            <Route element={<ProtectedRoute allowedRoles={[]} />}>
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/account" element={<Account />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+              <Route
+                path="/content-management"
+                element={<ContentManagement />}
+              />
+            </Route>
           </Route>
-        </Route>
 
-        {/* catch all */}
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 

@@ -7,6 +7,7 @@ export class ProductDto {
     public discount: number,
     public count: number,
     public category: string,
+    public photoUrl: string,
     public size?: number,
   ) {}
 }

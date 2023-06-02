@@ -1,1 +1,0 @@
-export { DetailedRing } from './DetailedRing';

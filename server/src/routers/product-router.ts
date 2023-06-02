@@ -8,9 +8,9 @@ const productRouter = express.Router();
 
 productRouter.get('/', productController.getAll);
 productRouter.get('/cart/:id', authGuard, privateGuard, productController.getAllInCart);
-productRouter.get('/add-to-cart/:id', authGuard, privateGuard, productController.addToCart);
-productRouter.get('/remove-from-cart/:id', authGuard, privateGuard, productController.removeFromCart);
-productRouter.get('/change-product-count/:id', authGuard, privateGuard, productController.changeProductCount);
+productRouter.patch('/add-to-cart/:id', authGuard, privateGuard, productController.addToCart);
+productRouter.patch('/remove-from-cart/:id', authGuard, privateGuard, productController.removeFromCart);
+productRouter.patch('/change-product-count/:id', authGuard, privateGuard, productController.changeProductCount);
 productRouter.post('/', authGuard, rolesGuard('ADMIN'), productController.create);
 productRouter.get('/:id', productController.getOne);
 productRouter.patch('/:id', authGuard, rolesGuard('ADMIN'), productController.update);

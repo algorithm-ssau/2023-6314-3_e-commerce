@@ -7,11 +7,13 @@ export const RecommendedProducts = () => {
   return (
     <Container>
       <div className="container">
-        <Typography variant="h4" sx={{ width: '100%', marginTop: '1em' }}>Другие товары</Typography>
+        <Typography variant="h4" sx={{ width: '100%', marginTop: '1em' }}>
+          Другие товары
+        </Typography>
         <Grid container sx={{ width: '100%', marginBottom: '1em' }}>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          <ProductCard imageUrl="../public/images/product-4.jpg" />
+          <ProductCard imageUrl="../public/images/product-2.jpg" />
+          <ProductCard imageUrl="../public/images/product-3.jpg" />
         </Grid>
       </div>
     </Container>

@@ -15,7 +15,7 @@ class ProductController {
   async getOne(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const product = await productService.getOne(+id);
+      const product = await productService.getOne(+req.body.productId);
       res.json(product);
     } catch (err) {
       next(err);
@@ -24,9 +24,9 @@ class ProductController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, price, material, fineness, discount, count, category, size } = req.body;
+      const { name, price, material, fineness, discount, count, category, size, photoUrl } = req.body;
       const product = await productService.create(
-        new ProductDto(name, price, material, fineness, discount, count, category, size),
+        new ProductDto(name, price, material, fineness, discount, count, category, photoUrl, size),
       );
       res.json(product);
     } catch (err) {
@@ -36,10 +36,10 @@ class ProductController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, price, material, fineness, discount, count, category, size } = req.body;
+      const { name, price, material, fineness, discount, count, category, size, photoUrl } = req.body;
       const product = await productService.update(
-        +req.params.id,
-        new ProductDto(name, price, material, fineness, discount, count, category, size),
+        +req.body.productId,
+        new ProductDto(name, price, material, fineness, discount, count, category, photoUrl, size),
       );
       res.json(product);
     } catch (err) {
@@ -49,7 +49,7 @@ class ProductController {
 
   async deleteOne(req: Request, res: Response, next: NextFunction) {
     try {
-      const product = await productService.deleteOne(+req.params.id);
+      const product = await productService.deleteOne(+req.body.productId);
       res.json(product);
     } catch (err) {
       next(err);
@@ -67,8 +67,8 @@ class ProductController {
 
   async addToCart(req: Request, res: Response, next: NextFunction) {
     try {
-      const { productId, count } = req.body;
-      const product = await productService.addProductToCart(+req.params.id, productId, count);
+      const { productId } = req.body;
+      const product = await productService.addProductToCart(+req.params.id, productId);
       res.json(product);
     } catch (err) {
       next(err);

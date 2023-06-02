@@ -3,17 +3,30 @@ import styles from './DetailedProduct.module.css';
 import { Image } from 'mui-image';
 import { Button, Typography } from '@mui/material';
 import { CustomContainer } from './styles';
+import { useParams } from 'react-router-dom';
+import { useGetOneProduct } from '../../lib/product/useProducts';
 
 export const DetailedProduct = () => {
+  const { id } = useParams();
+
+  const { data: product, error, isLoading } = useGetOneProduct(+(id ?? -1));
+
+  if (isLoading) return <div>Загрузка...</div>;
+
+  if (error || !product) {
+    console.log(error);
+    return <div>Товар не найден</div>;
+  }
+
   return (
     <div className={'container ' + styles.container}>
       <div className={styles.image}>
-        <Image src="./../images/home__new-product-1.jpg" alt="Товар" />
+        <Image src={product.photoUrl} alt="Товар" />
       </div>
       <CustomContainer>
-        <Typography variant="h4">Серьги из золоченого серебра</Typography>
+        <Typography variant="h4">{product.photoUrl}</Typography>
         <Typography variant="subtitle1" sx={{ marginBottom: '1em' }}>
-          2 600 ₽
+          {product.price} ₽
         </Typography>
         <Button variant="contained" sx={{ marginBottom: '5em' }}>
           В корзину
@@ -40,7 +53,7 @@ export const DetailedProduct = () => {
               color="#000"
               sx={{ transform: 'translateX(80%)' }}
             >
-              Золочёное серебро
+              {product.material}
             </Typography>
           </Box>
           <Box
@@ -54,7 +67,7 @@ export const DetailedProduct = () => {
               Проба
             </Typography>
             <Typography variant="body1" color="#000">
-              985
+              {product.fineness}
             </Typography>
           </Box>
         </Box>

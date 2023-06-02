@@ -8,8 +8,17 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import useLogout from '../../hooks/auth/useLogout';
+import { useNavigate } from 'react-router-dom';
 
 export const Account = () => {
+  const logout = useLogout();
+  const navigate = useNavigate();
+  const signOut = async () => {
+    await logout();
+    navigate('/');
+  };
+
   const matches = useMediaQuery('(max-width:730px)');
   return (
     <Container
@@ -46,6 +55,7 @@ export const Account = () => {
             marginBottom: '1em',
             width: matches ? '100%' : '45%',
           }}
+          onClick={signOut}
         >
           Выйти
         </Button>

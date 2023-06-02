@@ -125,6 +125,8 @@ class UserService {
   }
 
   async logout(refreshToken: string) {
+    console.log('refreshToken');
+    console.log(refreshToken);
     const tokenData = await tokenService.deleteToken(refreshToken);
     return tokenData;
   }

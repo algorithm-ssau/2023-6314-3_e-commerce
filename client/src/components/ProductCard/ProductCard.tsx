@@ -7,7 +7,11 @@ import {
   useMediaQuery,
 } from '@mui/material';
 
-export const ProductCard = () => {
+type ProductCardProps = {
+  imageUrl: string;
+}
+
+export const ProductCard = ({ imageUrl }: ProductCardProps) => {
   const matches = useMediaQuery('(max-width:980px)');
   return (
     <Grid
@@ -28,7 +32,7 @@ export const ProductCard = () => {
           component="img"
           alt="product"
           height={260}
-          image="../public/images/home__new-product-1.jpg"
+          image={imageUrl}
         />
         <CardContent>
           <Typography variant="body1" fontSize="1.5rem">

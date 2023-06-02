@@ -13,7 +13,7 @@ export const ShowCaseProduct = () => {
         >
           <div className={styles.productImg}>
             <CardMedia
-              image="./images/home__new-product-1.jpg"
+              image="./images/product-1.jpg"
               title=""
               sx={{
                 height: '40vh',

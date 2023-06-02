@@ -28,7 +28,7 @@ class UserController {
     try {
       const { password, name, email, avatarURL } = req.body;
       const userDto = new CreateUserDto(password, name, email, avatarURL);
-      
+
       const userData = await userService.register(userDto);
 
       res.cookie('refreshToken', userData.tokens.refreshToken, {
@@ -61,6 +61,8 @@ class UserController {
   async refreshToken(req: Request, res: Response, next: NextFunction) {
     try {
       const { refreshToken } = req.cookies;
+      console.log('refreshToken');
+      console.log(refreshToken);
       const userData = await userService.refreshToken(refreshToken);
 
       res.cookie('refreshToken', userData.tokens.refreshToken, {
@@ -77,6 +79,8 @@ class UserController {
   async logout(req: Request, res: Response, next: NextFunction) {
     try {
       const { refreshToken } = req.cookies;
+      console.log('refreshToken in controller');
+      console.log(refreshToken);
       const tokenData = await userService.logout(refreshToken);
       res.clearCookie('refreshToken');
 
