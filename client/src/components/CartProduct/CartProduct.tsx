@@ -20,7 +20,7 @@ export const CartProduct = () => {
           flexDirection: matches ? 'column' : 'row',
         }}
       >
-        <CustomCardMedia image="../public/images/product-1.jpg" />
+        <CustomCardMedia image="../images/product-1.jpg" />
         <CardContent>
           <Typography variant="body1" fontSize="1.5rem">
             2 800 ₽

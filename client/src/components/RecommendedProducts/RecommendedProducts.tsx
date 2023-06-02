@@ -11,9 +11,9 @@ export const RecommendedProducts = () => {
           Другие товары
         </Typography>
         <Grid container sx={{ width: '100%', marginBottom: '1em' }}>
-          <ProductCard imageUrl="../public/images/product-4.jpg" />
-          <ProductCard imageUrl="../public/images/product-2.jpg" />
-          <ProductCard imageUrl="../public/images/product-3.jpg" />
+          <ProductCard imageUrl="../images/product-4.jpg" />
+          <ProductCard imageUrl="../images/product-2.jpg" />
+          <ProductCard imageUrl="../images/product-3.jpg" />
         </Grid>
       </div>
     </Container>
